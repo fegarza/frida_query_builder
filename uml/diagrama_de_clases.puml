@@ -1,0 +1,149 @@
+@startuml query_builder
+
+
+abstract class CriteriaStatement extends Statement{
+    Criterion[] criteria
+}
+
+
+CriteriaStatement o-- Criterion
+
+abstract class Statement{
+    + String source
+}
+
+
+abstract class Criterion{
+    +String criterionOperator
+}
+
+abstract class CriterionCompare extends Criterion{
+
+    + String firstField
+    + String secondField
+}
+
+class Equals extends CriterionCompare{
+
+}
+
+class NotEquals extends CriterionCompare{
+
+}
+
+class Like extends CriterionCompare{
+
+}
+
+abstract class CriterionLogic extends Criterion{
+
+    + Crtiterion[] criteria
+}
+
+class And extends CriterionLogic{
+
+}
+class Or extends CriterionLogic{
+
+}
+
+enum ColumnDataType{
+    integer,
+    text,
+    real
+}
+
+class Create extends Statement{
+    + Column[] columns
+}
+
+Create *-- Column
+
+class Column{
+    String name
+    ColumnDataType type
+    bool isPrimaryKey
+    bool isNotNull
+    String? defaultValue
+}
+Column --> ColumnDataType
+
+
+class Delete extends CriteriaStatement{
+
+}
+
+class Update extends CriteriaStatement{
+    Map<String, String> values
+}
+
+
+class Select extends CriteriaStatement{
+    + String[] columns
+    + Join[] joins
+
+}
+
+class Join extends CriteriaStatement {
+    +String alias
+}
+
+Select o-- Join
+
+class Insert extends Statement{
+    + Map<String, String> values
+}
+
+
+
+
+interface QueryBuilder{
+    + Stirng build()
+}
+
+
+
+class FridaQueryBuilder implements QueryBuilder{
+    + Statement statement
+}
+
+
+
+class CriteriaQueryBuilder extends FridaQueryBuilder{
+
+}
+
+class SelectQueryBuilder extends CriteriaQueryBuilder{
+}
+
+class UpdateQueryBuilder extends CriteriaQueryBuilder{
+
+}
+
+class DeleteQueryBuilder extends CriteriaQueryBuilder{
+
+}
+class InsertQueryBuilder extends FridaQueryBuilder{
+
+}
+
+
+class CreateQueryBuilder extends FridaQueryBuilder{
+
+}
+
+
+
+
+class Client{}
+
+Client --> FridaQueryBuilder
+FridaQueryBuilder --> CriteriaQueryBuilder
+FridaQueryBuilder --> InsertQueryBuilder
+FridaQueryBuilder --> CreateQueryBuilder
+
+CriteriaQueryBuilder --> SelectQueryBuilder
+CriteriaQueryBuilder --> UpdateQueryBuilder
+CriteriaQueryBuilder --> DeleteQueryBuilder
+
+@enduml

@@ -1,7 +1,31 @@
- 
 import 'package:frida_query_builder/frida_query_builder.dart';
 
 void main() {
+  print(
+    FridaQueryBuilder(
+      Create(
+        tableName: "oc_vehiculo",
+        columns: [
+          Column(
+            name: "id_vehiculo",
+            type: ColumnDataType.integer,
+            isAutoIncrement: true,
+            isPrimaryKey: true,
+            isNotNull: true,
+          ),
+          Column(
+            name: "id_tipo_operacion",
+            type: ColumnDataType.text,
+            isPrimaryKey: true,
+            isNotNull: true,
+            defaultValue: "'0'"
+
+          ),
+        ],
+      ),
+    ).build(),
+  );
+
   print(
     FridaQueryBuilder(
       Select(

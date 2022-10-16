@@ -1,12 +1,5 @@
-import 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
-import 'package:frida_query_builder/src/query/criterion/equals.dart';
-import 'package:frida_query_builder/src/query/criterion/in.dart';
-import 'package:frida_query_builder/src/query/criterion/not_equals.dart';
-import 'package:frida_query_builder/src/query/criterion/or.dart';
-import 'package:frida_query_builder/src/query/delete/delete.dart';
-import 'package:frida_query_builder/src/query/select/join.dart';
-import 'package:frida_query_builder/src/query/select/select.dart';
-import 'package:frida_query_builder/src/query/update/update.dart';
+ 
+import 'package:frida_query_builder/frida_query_builder.dart';
 
 void main() {
   print(

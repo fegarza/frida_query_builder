@@ -1,7 +1,8 @@
 import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
-import 'package:frida_query_builder/src/query/common/statement.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion.dart';
 import 'package:frida_query_builder/src/query/select/join.dart';
+
+export 'package:frida_query_builder/src/query/select/join.dart';
 
 class Select extends CriteriaStatement {
   List<String> columns;

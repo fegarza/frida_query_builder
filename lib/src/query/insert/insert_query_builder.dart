@@ -8,7 +8,11 @@ class InsertQueryBuilder extends FridaQueryBuilder {
 
   @override
   String build() {
-    // TODO: implement build
-    throw UnimplementedError();
+    StringBuffer sb = StringBuffer();
+    sb.write("INSERT INTO ${insert.source} (");
+    sb.write(insert.values.keys.toList().join(" , ") + ")");
+    sb.write(" VALUES (");
+    sb.write(insert.values.values.toList().join(" , ") + ");");
+    return sb.toString();
   }
 }

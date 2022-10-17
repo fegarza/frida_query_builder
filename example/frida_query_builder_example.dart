@@ -2,6 +2,8 @@ import 'package:frida_query_builder/frida_query_builder.dart';
 
 void main() {
   print(
+      FridaQueryBuilder(Insert("oc_vehiculo", values: {"id": '"a"'})).build());
+  print(
     FridaQueryBuilder(
       Create(
         tableName: "oc_vehiculo",
@@ -14,13 +16,11 @@ void main() {
             isNotNull: true,
           ),
           Column(
-            name: "id_tipo_operacion",
-            type: ColumnDataType.text,
-            isPrimaryKey: true,
-            isNotNull: true,
-            defaultValue: "'0'"
-
-          ),
+              name: "id_tipo_operacion",
+              type: ColumnDataType.text,
+              isPrimaryKey: true,
+              isNotNull: true,
+              defaultValue: "'0'"),
         ],
       ),
     ).build(),

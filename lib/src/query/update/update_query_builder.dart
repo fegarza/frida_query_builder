@@ -1,5 +1,6 @@
 import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
 import 'package:frida_query_builder/src/query/criterion/criteria_query_builder.dart';
+import 'package:frida_query_builder/src/query/criterion/field_query_builder.dart';
 import 'package:frida_query_builder/src/query/update/update.dart';
 
 class UpdateQueryBuilder extends CriteriaQueryBuilder {
@@ -30,7 +31,7 @@ class UpdateQueryBuilder extends CriteriaQueryBuilder {
         if (!isFirstValue) {
           sb.write(",");
         }
-        sb.write("$key = $value ");
+        sb.write("$key = ${FieldQueryBuilder(value).build()} ");
 
         isFirstValue = false;
       },

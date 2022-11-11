@@ -1,5 +1,6 @@
 import 'package:frida_query_builder/src/query/criterion/criterion_compare.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_query_builder.dart';
+import 'package:frida_query_builder/src/query/criterion/field_query_builder.dart';
 
 class CriterionCompareQueryBuilder extends CriterionQueryBuilder {
   CriterionCompare criterionCompare;
@@ -9,6 +10,7 @@ class CriterionCompareQueryBuilder extends CriterionQueryBuilder {
   @override
   String build() {
     criterion = criterion as CriterionCompare;
-    return " ${criterionCompare.firstField} ${criterionCompare.criterionOperator} ${criterionCompare.secondField} ";
+
+    return " ${FieldQueryBuilder(criterionCompare.firstField).build()} ${criterionCompare.criterionOperator} ${FieldQueryBuilder(criterionCompare.secondField).build()} ";
   }
 }

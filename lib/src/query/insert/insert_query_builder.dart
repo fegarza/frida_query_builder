@@ -1,4 +1,5 @@
 import 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
+import 'package:frida_query_builder/src/query/criterion/field_query_builder.dart';
 import 'package:frida_query_builder/src/query/insert/insert.dart';
 
 class InsertQueryBuilder extends FridaQueryBuilder {
@@ -12,7 +13,13 @@ class InsertQueryBuilder extends FridaQueryBuilder {
     sb.write("INSERT INTO ${insert.source} (");
     sb.write(insert.values.keys.toList().join(" , ") + ")");
     sb.write(" VALUES (");
-    sb.write(insert.values.values.toList().join(" , ") + ");");
+    sb.write(insert.values.values
+            .toList()
+            .map(
+              (e) => FieldQueryBuilder(e).build(),
+            )
+            .join(" , ") +
+        ");");
     return sb.toString();
   }
 }

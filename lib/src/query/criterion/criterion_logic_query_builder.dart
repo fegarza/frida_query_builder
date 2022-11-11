@@ -18,15 +18,11 @@ class CriterionLogicQueryBuilder extends CriterionQueryBuilder {
 
     sb.write(" ${criterionLogic.criterionOperator} ( ");
 
-    sb.write(CriteriaQueryBuilder(
-            CriteriaStatement("", criteria: criterionLogic.criteria))
-        .build());
-    /*
-    criterionLogic.criteria.forEach(
-      (element) {
-        sb.write(CriterionQueryBuilder(element).build());
-      },
-    );*/
+    sb.write(
+      CriteriaQueryBuilder(
+        CriteriaStatement("", criteria: criterionLogic.criteria),
+      ).build(),
+    );
 
     sb.write(" ) ");
 

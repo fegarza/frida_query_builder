@@ -1,102 +1,97 @@
 import 'package:frida_query_builder/frida_query_builder.dart';
 
 void main() {
-  print(
-      FridaQueryBuilder(Insert("oc_vehiculo", values: {"id": '"a"'})).build());
+  //Create table
   print(
     FridaQueryBuilder(
       Create(
-        tableName: "oc_vehiculo",
+        tableName: "students",
         columns: [
           Column(
-            name: "id_vehiculo",
-            type: ColumnDataType.integer,
-            isAutoIncrement: true,
-            isPrimaryKey: true,
-            isNotNull: true,
-          ),
+              name: "student_id",
+              type: ColumnDataType.integer,
+              isAutoIncrement: true,
+              isPrimaryKey: true),
           Column(
-              name: "id_tipo_operacion",
-              type: ColumnDataType.text,
-              isPrimaryKey: true,
-              isNotNull: true,
-              defaultValue: "'0'"),
+            name: "name",
+            type: ColumnDataType.text,
+          ),
+          Column(name: "email", type: ColumnDataType.text, isNotNull: true),
         ],
       ),
     ).build(),
   );
+  /*
+    Output:
+    CREATE TABLE students (
+      id INTEGER AUTO INCREMENT  ,
+      name TEXT  ,
+      email TEXT NOT NULL ,
+      PRIMARY KEY ( id)
+    );
+  */
 
+  //Create query
+  print(
+    FridaQueryBuilder(
+      Select(from: "students"),
+    ).build(),
+  );
+  /* 
+    Output:
+    SELECT * FROM person
+  */
+
+  //More complex query
   print(
     FridaQueryBuilder(
       Select(
-        from: "oc_vehiculo",
-        alias: "v",
-        columns: ["a", "2"],
-        offset: 2,
-        limit: 3,
-        joins: [
-          Join(
-            "fcliente",
-            type: JoinType.left,
-            alias: "c",
-            criteria: [Equals("v.id_cliente", "c.id_cliente")],
-          ),
-        ],
-        criteria: [
-          Equals("v.numero_vehiculo", "'0004'"),
-          Or([
-            Equals("1", "1"),
-            Or(
-              [
-                Equals("2", "2"),
-                In("firstField", ["1", "2"])
-              ],
-            )
+          from: "students",
+          columns: [
+            Field("s.name"),
+            Field("s.student_id"),
+            Field("s.email"),
+            Field('"Text" AS simpleText '),
+            2,
+            2.22,
+            "Text x2"
+          ],
+          joins: [
+            Join("student_classes", alias: "c", criteria: [
+              Equals(
+                Field("c.student_id"),
+                Field("s.student_id"),
+              ),
+              NotEquals(
+                Field("c.description"),
+                "math",
+              )
+            ])
+          ],
+          alias: "s",
+          limit: 2,
+          offset: 3,
+          orderBy: ["c.description"],
+          criteria: [
+            In(Field("s.name"), ["Felipe", "Juan"]),
+            Or([
+              Equals("b", "b"),
+              And([
+                Equals("1", "1"),
+                Equals("1", "1"),
+              ])
+            ])
           ]),
-          NotEquals("v.id_cliente", "'000078'")
-        ],
-      ),
     ).build(),
   );
-
-  print(
-    FridaQueryBuilder(
-      Update(
-        table: "oc_vehiculo",
-        values: {"id_vehiculo": "'002'"},
-        criteria: [
-          Equals("v.numero_vehiculo", "'0004'"),
-          Or([
-            Equals("1", "1"),
-            Or(
-              [
-                Equals("2", "2"),
-              ],
-            )
-          ]),
-          NotEquals("v.id_cliente", "'000078'")
-        ],
-      ),
-    ).build(),
-  );
-
-  print(
-    FridaQueryBuilder(
-      Delete(
-        table: "oc_vehiculo",
-        criteria: [
-          Equals("v.numero_vehiculo", "'0004'"),
-          Or([
-            Equals("1", "1"),
-            Or(
-              [
-                Equals("2", "2"),
-              ],
-            )
-          ]),
-          NotEquals("v.id_cliente", "'000078'")
-        ],
-      ),
-    ).build(),
-  );
+/*
+  OUTPUT:
+  SELECT s.name , s.student_id , s.email , "Text" AS simpleText  , 2 , 2.22 , "Text x2"
+  FROM students AS s
+  INNER JOIN student_classes AS c
+  ON  c.student_id = s.student_id  AND  c.description <> "math" 
+  WHERE  s.name IN ( "Felipe" , "Juan" )  OR (  "b" = "b"  AND (  "1" = "1"  AND  "1" = "1"  )  ) 
+  ORDER BY c.description
+  LIMIT 2 OFFSET 3
+ */
 }

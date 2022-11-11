@@ -1,5 +1,6 @@
 import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
 import 'package:frida_query_builder/src/query/criterion/criteria_query_builder.dart';
+import 'package:frida_query_builder/src/query/criterion/field_query_builder.dart';
 import 'package:frida_query_builder/src/query/select/join_query_builder.dart';
 import 'package:frida_query_builder/src/query/select/select.dart';
 
@@ -51,7 +52,7 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
     if (select.columns.isEmpty) {
       return "*";
     }
-    return select.columns.join(" , ");
+    return select.columns.map((e) => FieldQueryBuilder(e).build()).join(" , ");
   }
 
   String _buildGroupBy() {

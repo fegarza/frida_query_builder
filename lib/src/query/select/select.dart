@@ -5,7 +5,7 @@ import 'package:frida_query_builder/src/query/select/join.dart';
 export 'package:frida_query_builder/src/query/select/join.dart';
 
 class Select extends CriteriaStatement {
-  List<String> columns;
+  List<Object> columns;
   List<String> orderBy;
   List<String> groupBy;
   List<Join> joins;

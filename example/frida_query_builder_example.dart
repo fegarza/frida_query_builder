@@ -16,7 +16,11 @@ void main() {
             name: "name",
             type: ColumnDataType.text,
           ),
-          Column(name: "email", type: ColumnDataType.text, isNotNull: true),
+          Column(
+            name: "email",
+            type: ColumnDataType.text,
+            isNotNull: true,
+          ),
         ],
       ),
     ).build(),
@@ -31,10 +35,12 @@ void main() {
     );
   */
 
-  //Create query
+  //Select query
   print(
     FridaQueryBuilder(
-      Select(from: "students"),
+      Select(
+        from: "students",
+      ),
     ).build(),
   );
   /* 
@@ -42,22 +48,25 @@ void main() {
     SELECT * FROM person
   */
 
-  //More complex query
+  // Select complex query
   print(
     FridaQueryBuilder(
       Select(
-          from: "students",
-          columns: [
-            Field("s.name"),
-            Field("s.student_id"),
-            Field("s.email"),
-            Field('"Text" AS simpleText '),
-            2,
-            2.22,
-            "Text x2"
-          ],
-          joins: [
-            Join("student_classes", alias: "c", criteria: [
+        from: "students",
+        columns: [
+          Field("s.name"),
+          Field("s.student_id"),
+          Field("s.email"),
+          Field('"Text" AS simpleText '),
+          2,
+          2.22,
+          "Text x2"
+        ],
+        joins: [
+          Join(
+            "student_classes",
+            alias: "c",
+            criteria: [
               Equals(
                 Field("c.student_id"),
                 Field("s.student_id"),
@@ -65,23 +74,24 @@ void main() {
               NotEquals(
                 Field("c.description"),
                 "math",
-              )
-            ])
-          ],
-          alias: "s",
-          limit: 2,
-          offset: 3,
-          orderBy: ["c.description"],
-          criteria: [
-            In(Field("s.name"), ["Felipe", "Juan"]),
-            Or([
+              ),
+            ],
+          )
+        ],
+        alias: "s",
+        limit: 2,
+        offset: 3,
+        orderBy: ["c.description"],
+        criteria: [
+          In(Field("s.name"), ["Felipe", "Juan"]),
+          Or(
+            [
               Equals("b", "b"),
-              And([
-                Equals("1", "1"),
-                Equals("1", "1"),
-              ])
-            ])
-          ]),
+              And([Equals("1", "1"), Equals("1", "1")])
+            ],
+          )
+        ],
+      ),
     ).build(),
   );
 /*

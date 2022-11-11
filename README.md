@@ -1,39 +1,121 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Frida Query Builder 
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+A dart library to create Sqlite queries programatically.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+## Diagram class
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+<img src="out/uml/diagramClass/query_builder.png"/>
 
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+### Build a create query
 
 ```dart
-const like = 'sample';
+  print(
+    FridaQueryBuilder(
+      Create(
+        tableName: "students",
+        columns: [
+          Column(
+              name: "student_id",
+              type: ColumnDataType.integer,
+              isAutoIncrement: true,
+              isPrimaryKey: true),
+          Column(
+            name: "name",
+            type: ColumnDataType.text,
+          ),
+          Column(
+            name: "email",
+            type: ColumnDataType.text,
+            isNotNull: true
+          ),
+        ],
+      ),
+    ).build(),
+  );
+  /*
+    Output:
+    CREATE TABLE students (
+      id INTEGER AUTO INCREMENT  ,
+      name TEXT  ,
+      email TEXT NOT NULL ,
+      PRIMARY KEY ( id)
+    );
+  */
 ```
 
-## Additional information
+### Build a select query
+```dart
+print(
+    FridaQueryBuilder(
+    Select(
+        from: "students",
+    ),
+    ).build(),
+);
+/* 
+    Output:
+    SELECT * FROM person
+*/
+```
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+```dart
+// Select complex query
+  print(
+    FridaQueryBuilder(
+      Select(
+        from: "students",
+        columns: [
+          Field("s.name"),
+          Field("s.student_id"),
+          Field("s.email"),
+          Field('"Text" AS simpleText '),
+          2,
+          2.22,
+          "Text x2"
+        ],
+        joins: [
+          Join(
+            "student_classes",
+            alias: "c",
+            criteria: [
+              Equals(
+                Field("c.student_id"),
+                Field("s.student_id"),
+              ),
+              NotEquals(
+                Field("c.description"),
+                "math",
+              ),
+            ],
+          )
+        ],
+        alias: "s",
+        limit: 2,
+        offset: 3,
+        orderBy: ["c.description"],
+        criteria: [
+          In(Field("s.name"), ["Felipe", "Juan"]),
+          Or(
+            [
+              Equals("b", "b"),
+              And([Equals("1", "1"), Equals("1", "1")])
+            ],
+          )
+        ],
+      ),
+    ).build(),
+  );
+/*
+  OUTPUT:
+  SELECT s.name , s.student_id , s.email , "Text" AS simpleText  , 2 , 2.22 , "Text x2"
+  FROM students AS s
+  INNER JOIN student_classes AS c
+  ON  c.student_id = s.student_id  AND  c.description <> "math" 
+  WHERE  s.name IN ( "Felipe" , "Juan" )  OR (  "b" = "b"  AND (  "1" = "1"  AND  "1" = "1"  )  ) 
+  ORDER BY c.description
+  LIMIT 2 OFFSET 3
+ */
+```

@@ -74,7 +74,7 @@ class Delete extends CriteriaStatement{
 }
 
 class Update extends CriteriaStatement{
-    Map<String, String> values
+    Map<String, Object?> values
 }
 
 
@@ -91,9 +91,8 @@ class Join extends CriteriaStatement {
 Select o-- Join
 
 class Insert extends Statement{
-    + Map<String, String> values
+    + Map<String, Object?> values
 }
-
 
 
 

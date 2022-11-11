@@ -94,14 +94,27 @@ void main() {
       ),
     ).build(),
   );
-/*
-  OUTPUT:
-  SELECT s.name , s.student_id , s.email , "Text" AS simpleText  , 2 , 2.22 , "Text x2"
-  FROM students AS s
-  INNER JOIN student_classes AS c
-  ON  c.student_id = s.student_id  AND  c.description <> "math" 
-  WHERE  s.name IN ( "Felipe" , "Juan" )  OR (  "b" = "b"  AND (  "1" = "1"  AND  "1" = "1"  )  ) 
-  ORDER BY c.description
-  LIMIT 2 OFFSET 3
- */
+
+  print(
+    FridaQueryBuilder(
+      Update(
+        table: "students",
+        values: {"name": "Juan"},
+        criteria: [
+          Equals(Field("name"), "Felipe"),
+        ],
+      ),
+    ).build(),
+  );
+
+  print(
+    FridaQueryBuilder(
+      Delete(
+        table: "students",
+        criteria: [
+          Equals(Field("name"), "Felipe"),
+        ],
+      ),
+    ).build(),
+  );
 }

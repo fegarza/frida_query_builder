@@ -1,0 +1,46 @@
+@startuml builder_classes
+
+interface QueryBuilder{
+    + Stirng build()
+}
+
+
+
+class FridaQueryBuilder implements QueryBuilder{
+    + Statement statement
+}
+
+
+
+class CriteriaQueryBuilder extends FridaQueryBuilder{
+
+}
+
+class SelectQueryBuilder extends CriteriaQueryBuilder{
+}
+
+class UpdateQueryBuilder extends CriteriaQueryBuilder{
+
+}
+
+class DeleteQueryBuilder extends CriteriaQueryBuilder{
+
+}
+class InsertQueryBuilder extends FridaQueryBuilder{
+
+}
+
+
+class CreateQueryBuilder extends FridaQueryBuilder{
+
+}
+
+abstract class Statement{}
+
+class Client{}
+
+Client --> FridaQueryBuilder
+ 
+FridaQueryBuilder *-- Statement
+
+@enduml

@@ -1,4 +1,4 @@
-@startuml query_builder
+@startuml statement_classes
 
 
 abstract class CriteriaStatement extends Statement{
@@ -19,8 +19,8 @@ abstract class Criterion{
 
 abstract class CriterionCompare extends Criterion{
 
-    + String firstField
-    + String secondField
+    + Object? firstField
+    + Object? secondField
 }
 
 class Equals extends CriterionCompare{
@@ -68,7 +68,6 @@ class Column{
 }
 Column --> ColumnDataType
 
-
 class Delete extends CriteriaStatement{
 
 }
@@ -96,53 +95,5 @@ class Insert extends Statement{
 
 
 
-interface QueryBuilder{
-    + Stirng build()
-}
-
-
-
-class FridaQueryBuilder implements QueryBuilder{
-    + Statement statement
-}
-
-
-
-class CriteriaQueryBuilder extends FridaQueryBuilder{
-
-}
-
-class SelectQueryBuilder extends CriteriaQueryBuilder{
-}
-
-class UpdateQueryBuilder extends CriteriaQueryBuilder{
-
-}
-
-class DeleteQueryBuilder extends CriteriaQueryBuilder{
-
-}
-class InsertQueryBuilder extends FridaQueryBuilder{
-
-}
-
-
-class CreateQueryBuilder extends FridaQueryBuilder{
-
-}
-
-
-
-
-class Client{}
-
-Client --> FridaQueryBuilder
-FridaQueryBuilder --> CriteriaQueryBuilder
-FridaQueryBuilder --> InsertQueryBuilder
-FridaQueryBuilder --> CreateQueryBuilder
-
-CriteriaQueryBuilder --> SelectQueryBuilder
-CriteriaQueryBuilder --> UpdateQueryBuilder
-CriteriaQueryBuilder --> DeleteQueryBuilder
 
 @enduml

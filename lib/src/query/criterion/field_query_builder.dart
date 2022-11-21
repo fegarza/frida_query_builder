@@ -15,8 +15,11 @@ class FieldQueryBuilder extends QueryBuilder {
       return '"$field"';
     }
     if (field is Field) {
-      return (field as Field).field;
+      Field f = (field as Field);
+
+      return f.field;
     }
+
     return field.toString();
   }
 }

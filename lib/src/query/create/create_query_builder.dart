@@ -1,4 +1,5 @@
 import 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
+import 'package:frida_query_builder/src/query/create/column_query_builder.dart';
 import 'package:frida_query_builder/src/query/create/create.dart';
 
 class CreateQueryBuilder extends FridaQueryBuilder {
@@ -12,19 +13,7 @@ class CreateQueryBuilder extends FridaQueryBuilder {
     sb.writeln("CREATE TABLE ${create.source} (");
     sb.writeln(create.columns
             .map((e) {
-              StringBuffer sb = StringBuffer();
-              sb.write("${e.name} ${e.type.getString()} ");
-              if (e.defaultValue != null) {
-                sb.write("DEFAULT(${e.defaultValue}) ");
-              }
-
-              if (e.isNotNull) {
-                sb.write("NOT NULL ");
-              }
-              if (e.isAutoIncrement) {
-                sb.write("AUTO INCREMENT ");
-              }
-              return sb.toString();
+              return ColumnQueryBuilder(e).build();
             })
             .toList()
             .join(" ,\n") +

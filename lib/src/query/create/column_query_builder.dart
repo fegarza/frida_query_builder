@@ -20,7 +20,11 @@ class ColumnQueryBuilder implements QueryBuilder {
     }
 
     if (column.defaultValue != null) {
-      sb.write("DEFAULT(${column.defaultValue}) ");
+      final defaultValue = (column.type == ColumnDataType.text)
+          ? '"${column.defaultValue}"'
+          : "${column.defaultValue}";
+
+      sb.write('DEFAULT($defaultValue) ');
     }
 
     return sb.toString();

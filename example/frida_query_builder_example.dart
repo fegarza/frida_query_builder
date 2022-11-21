@@ -1,120 +1,136 @@
 import 'package:frida_query_builder/frida_query_builder.dart';
 
 void main() {
-  //Create table
-  print(
-    FridaQueryBuilder(
-      Create(
-        tableName: "students",
-        columns: [
-          Column(
-              name: "student_id",
-              type: ColumnDataType.integer,
-              isAutoIncrement: true,
-              isPrimaryKey: true),
-          Column(
-            name: "name",
-            type: ColumnDataType.text,
-          ),
-          Column(
-            name: "email",
-            type: ColumnDataType.text,
-            isNotNull: true,
-          ),
-        ],
+  var statement;
+
+  statement = Create(
+    tableName: "students",
+    columns: [
+      Column(
+        name: "student_id",
+        type: ColumnDataType.integer,
+        isAutoIncrement: true,
+        isPrimaryKey: true,
       ),
-    ).build(),
+      Column(
+        name: "name",
+        type: ColumnDataType.text,
+        isNotNull: true,
+        defaultValue: "2",
+      ),
+      Column(
+        name: "email",
+        type: ColumnDataType.text,
+        isNotNull: true,
+      ),
+    ],
   );
-  /*
-    Output:
-    CREATE TABLE students (
-      id INTEGER AUTO INCREMENT  ,
-      name TEXT  ,
-      email TEXT NOT NULL ,
-      PRIMARY KEY ( id)
-    );
+
+  print(FridaQueryBuilder(statement).build());
+  /* OUTPUT:
+  CREATE TABLE students (
+  student_id INTEGER AUTO INCREMENT  ,
+  name TEXT NOT NULL DEFAULT("2")  ,
+  email TEXT NOT NULL ,
+  PRIMARY KEY ( student_id)
+  );
   */
 
-  //Select query
-  print(
-    FridaQueryBuilder(
-      Select(
-        from: "students",
-      ),
-    ).build(),
-  );
-  /* 
-    Output:
-    SELECT * FROM person
+  statement = Select(from: "students");
+
+  print(FridaQueryBuilder(statement).build());
+  /* OUTPUT:
+  SELECT *
+  FROM students 
   */
 
-  // Select complex query
-  print(
-    FridaQueryBuilder(
-      Select(
-        from: "students",
-        columns: [
-          Field("s.name"),
-          Field("s.student_id"),
-          Field("s.email"),
-          Field('"Text" AS simpleText '),
-          2,
-          2.22,
-          "Text x2"
-        ],
-        joins: [
-          Join(
-            "student_classes",
-            alias: "c",
-            criteria: [
-              Equals(
-                Field("c.student_id"),
-                Field("s.student_id"),
-              ),
-              NotEquals(
-                Field("c.description"),
-                "math",
-              ),
-            ],
-          )
-        ],
-        alias: "s",
-        limit: 2,
-        offset: 3,
-        orderBy: ["c.description"],
-        criteria: [
-          In(Field("s.name"), ["Felipe", "Juan"]),
-          Or(
-            [
-              Equals("b", "b"),
-              And([Equals("1", "1"), Equals("1", "1")])
-            ],
-          )
-        ],
-      ),
-    ).build(),
+  statement = Select(
+    from: "students",
+    alias: "s",
+    columns: [
+      "name".field,
+      "age".field,
+      "gender".field,
+      "Simple Text",
+      22,
+    ],
   );
 
-  print(
-    FridaQueryBuilder(
-      Update(
-        table: "students",
-        values: {"name": "Juan"},
+  print(FridaQueryBuilder(statement).build());
+  /* OUTPUT:
+  SELECT name , age , gender , "Simple Text" , 22
+  FROM students AS s
+  */
+
+  statement = Select(
+    from: "students",
+    columns: [
+      "s.name".field,
+      "s.student_id",
+      "s.email",
+      '"Text" AS simpleText',
+      2.field,
+      2.22.field,
+      "Text x2",
+    ],
+    joins: [
+      Join(
+        "student_classes",
+        alias: "c",
         criteria: [
-          Equals(Field("name"), "Felipe"),
+          Equals("c.student_id".field, "s.student_id".field),
+          NotEquals("c.description".field, "math"),
         ],
-      ),
-    ).build(),
+      )
+    ],
+    alias: "s",
+    limit: 2,
+    offset: 3,
+    orderBy: ["c.description"],
+    criteria: [
+      In("s.name".field, ["Felipe", "Juan"]),
+      Or(
+        [
+          Equals("b", "b"),
+          And([Equals("1", "1"), Equals("1", "1")])
+        ],
+      )
+    ],
   );
 
-  print(
-    FridaQueryBuilder(
-      Delete(
-        table: "students",
-        criteria: [
-          Equals(Field("name"), "Felipe"),
-        ],
-      ),
-    ).build(),
+  print(FridaQueryBuilder(statement).build());
+  /* OUTPUT:
+  SELECT s.name , "s.student_id" , "s.email" , ""Text" AS simpleText" , 2 , 2.22 , "Text x2"
+  FROM students AS s
+  INNER JOIN student_classes AS c
+  ON  c.student_id = s.student_id  AND  c.description <> "math" 
+  WHERE  s.name IN ( "Felipe" , "Juan" )  OR (  "b" = "b"  AND (  "1" = "1"  AND  "1" = "1"  )  ) 
+  ORDER BY c.description
+  LIMIT 2 OFFSET 3
+  */
+
+  statement = Update(
+    table: "students",
+    values: {"name": "Juan"},
+    criteria: [
+      Equals("name".field, "Felipe"),
+    ],
   );
+  print(FridaQueryBuilder(statement).build());
+  /* OUTPUT:
+  UPDATE students SET name = "Juan" 
+  WHERE  name = "Felipe" 
+  */
+
+  statement = Delete(
+    table: "students",
+    criteria: [
+      Equals("name".field, "Felipe"),
+    ],
+  );
+  print(FridaQueryBuilder(statement).build());
+  /* OUTPUT:
+  DELETE students 
+  WHERE  name = "Felipe"
+  */
 }

@@ -25,7 +25,6 @@ class CriterionLogicQueryBuilder extends CriterionQueryBuilder {
     sb.write(
       CriteriaQueryBuilder(
         CriteriaStatement("", criteria: criterionLogic.criteria),
-        quoted: quoted,
       ).build(),
     );
 

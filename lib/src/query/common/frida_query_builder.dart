@@ -25,6 +25,7 @@ class FridaQueryBuilder implements QueryBuilder {
     throw Exception();
   }
 
+  @override
   String build() {
     return _getQueryBuilder().build();
   }

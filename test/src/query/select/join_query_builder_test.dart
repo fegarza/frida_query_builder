@@ -11,7 +11,12 @@ void main() {
           Join(
             "user",
             criteria: [
-              Equals('user.id', 'address.user_id'),
+              Equals(
+                'user.id',
+                'address.user_id',
+                firstFieldQuoted: false,
+                secondFieldQuoted: false,
+              ),
             ],
           ),
         );

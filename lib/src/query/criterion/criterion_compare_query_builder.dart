@@ -7,16 +7,14 @@ class CriterionCompareQueryBuilder extends CriterionQueryBuilder {
 
   CriterionCompareQueryBuilder(
     this.criterionCompare, {
-    this.quoted = true,
+    this.firstFieldQuoted = true,
+    this.secondFieldQuoted = true,
   }) : super(
           criterionCompare,
         );
 
-  /// Indicates if the comparison is a database object, which means it should not be wrapped with "".</br>
-  /// It must be used on joins and other operations
-  /// where you are referencing something the following way: tableName.field</br>
-  /// By default it's false
-  final bool quoted;
+  final bool firstFieldQuoted;
+  final bool secondFieldQuoted;
 
   @override
   String build() {
@@ -24,10 +22,10 @@ class CriterionCompareQueryBuilder extends CriterionQueryBuilder {
 
     return " ${FieldQueryBuilder(
       criterionCompare.firstField,
-      quoted: quoted,
+      quoted: firstFieldQuoted,
     ).build()} ${criterionCompare.criterionOperator} ${FieldQueryBuilder(
       criterionCompare.secondField,
-      quoted: quoted,
+      quoted: secondFieldQuoted,
     ).build()} ";
   }
 }

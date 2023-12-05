@@ -25,7 +25,6 @@ class JoinQueryBuilder extends CriteriaQueryBuilder {
             join.source,
             criteria: join.criteria,
           ),
-          quoted: false,
         ).build()}",
       );
     }

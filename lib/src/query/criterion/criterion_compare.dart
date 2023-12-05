@@ -4,6 +4,15 @@ abstract class CriterionCompare extends Criterion {
   Object? firstField;
   Object? secondField;
 
-  CriterionCompare(this.firstField, this.secondField, String compareOperator)
-      : super(compareOperator);
+  CriterionCompare(
+    this.firstField,
+    this.secondField,
+    String compareOperator, {
+    firstFieldQuoted = true,
+    secondFieldQuoted = true,
+  }) : super(
+          compareOperator,
+          firstFieldQuoted: firstFieldQuoted,
+          secondFieldQuoted: secondFieldQuoted,
+        );
 }

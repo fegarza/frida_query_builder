@@ -13,11 +13,7 @@ import 'package:frida_query_builder/src/query/update/update_query_builder.dart';
 
 class CriteriaQueryBuilder extends FridaQueryBuilder {
   CriteriaStatement criteriaStatement;
-  final bool quoted;
-  CriteriaQueryBuilder(
-    this.criteriaStatement, {
-    this.quoted = true,
-  }) : super(criteriaStatement);
+  CriteriaQueryBuilder(this.criteriaStatement) : super(criteriaStatement);
 
   @override
   String build() {
@@ -39,7 +35,9 @@ class CriteriaQueryBuilder extends FridaQueryBuilder {
     for (final criteria in criteriaStatement.criteria) {
       if (criteria is CriterionLogic) {
         sb.write(
-          CriterionLogicQueryBuilder(criteria, quoted: quoted).build(),
+          CriterionLogicQueryBuilder(criteria,
+                  quoted: criteria.firstFieldQuoted)
+              .build(),
         );
       }
       if (criteria is CriterionCompare) {
@@ -47,7 +45,11 @@ class CriteriaQueryBuilder extends FridaQueryBuilder {
           sb.write(" AND ");
         }
         sb.write(
-          CriterionCompareQueryBuilder(criteria, quoted: quoted).build(),
+          CriterionCompareQueryBuilder(
+            criteria,
+            firstFieldQuoted: criteria.firstFieldQuoted,
+            secondFieldQuoted: criteria.secondFieldQuoted,
+          ).build(),
         );
       }
       isFirstIteration = false;

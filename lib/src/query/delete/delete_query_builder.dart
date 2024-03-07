@@ -11,7 +11,7 @@ class DeleteQueryBuilder extends CriteriaQueryBuilder {
   String build() {
     StringBuffer sb = StringBuffer();
 
-    sb.writeln("DELETE ${delete.source} ");
+    sb.writeln("DELETE FROM ${delete.source} ");
 
     if (delete.criteria.isNotEmpty) {
       sb.writeln("WHERE ${CriteriaQueryBuilder(CriteriaStatement(

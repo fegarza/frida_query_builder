@@ -57,8 +57,8 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
 
   String _buildGroupBy() {
     final sb = StringBuffer();
-    if (select.orderBy.isNotEmpty) {
-      sb.write(" GROUP BY " + select.orderBy.join(" , "));
+    if (select.groupBy.isNotEmpty) {
+      sb.write(" GROUP BY " + select.groupBy.join(" , "));
     }
 
     return sb.toString();

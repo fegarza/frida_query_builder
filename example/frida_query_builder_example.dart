@@ -1,7 +1,8 @@
 import 'package:frida_query_builder/frida_query_builder.dart';
+import 'package:frida_query_builder/src/query/common/statement.dart';
 
 void main() {
-  var statement;
+  Statement statement;
 
   statement = Create(
     tableName: "students",

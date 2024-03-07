@@ -21,11 +21,9 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
     sb.writeln("SELECT ${_buildProjections()}");
     sb.writeln("FROM ${select.source} $alias");
     if (select.joins.isNotEmpty) {
-      select.joins.forEach(
-        (join) {
-          sb.write(JoinQueryBuilder(join).build());
-        },
-      );
+      for (final join in select.joins) {
+        sb.write(JoinQueryBuilder(join).build());
+      }
     }
 
     if (select.criteria.isNotEmpty) {

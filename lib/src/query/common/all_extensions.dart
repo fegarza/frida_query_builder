@@ -5,9 +5,9 @@ extension FridaString on String {
 }
 
 extension FridaInt on int {
-  Field get field => Field(this.toString());
+  Field get field => Field(toString());
 }
 
 extension FridaDouble on double {
-  Field get field => Field(this.toString());
+  Field get field => Field(toString());
 }

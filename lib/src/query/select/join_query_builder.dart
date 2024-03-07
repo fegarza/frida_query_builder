@@ -19,10 +19,14 @@ class JoinQueryBuilder extends CriteriaQueryBuilder {
     sb.writeln("${join.type.getString()} ${join.source} $alias");
 
     if (criteriaStatement.criteria.isNotEmpty) {
-      sb.writeln(" ON ${CriteriaQueryBuilder(CriteriaStatement(
-        join.source,
-        criteria: join.criteria,
-      )).build()}");
+      sb.writeln(
+        " ON ${CriteriaQueryBuilder(
+          CriteriaStatement(
+            join.source,
+            criteria: join.criteria,
+          ),
+        ).build()}",
+      );
     }
 
     return sb.toString();

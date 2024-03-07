@@ -5,11 +5,11 @@ A dart library that helps you create SQLITE queries using statements and the bui
 ## 📄 UML Diagram classes
 <details>
 <summary>Statements classes</summary>
-<img src="out/uml/statementClasses/statement_classes.svg"/>
+<img src="https://raw.githubusercontent.com/fegarza/frida_query_builder/main/out/uml/statementClasses/statement_classes.png"/>
 </details>
 <details>
 <summary>Builders classes</summary>
-<img src="out/uml/buildersClasses/builder_classes.svg"/>
+<img src="https://raw.githubusercontent.com/fegarza/frida_query_builder/main/out/uml/buildersClasses/builder_classes.png"/>
 </details>
 
 

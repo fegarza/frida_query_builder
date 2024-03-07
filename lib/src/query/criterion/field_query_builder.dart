@@ -18,6 +18,10 @@ class FieldQueryBuilder extends QueryBuilder {
       if (!quoted) {
         return "$field";
       }
+      if ((field as String).contains('"')) {
+        field = (field as String).replaceAll('"', '""');
+      }
+
       return '"$field"';
     }
     if (field is Field) {

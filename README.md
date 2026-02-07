@@ -215,11 +215,11 @@ print(delete.build());
 | UNIQUE                                     |    ✅     |
 | PRIMARY KEY                                |    ✅     |
 | FOREIGN KEY                                |    ✅     |
-| Arithmetic operators (+, -, \*, /)         |    ❌     |
+| Arithmetic operators (+, -, \*, /)         |    ✅     |
 | Comparison operators (=, <>, <, <=, >, >=) |    ✅     |
 | AND                                        |    ✅     |
 | OR                                         |    ✅     |
-| NOT                                        |    ❌     |
+| NOT                                        |    ✅     |
 | IN                                         |    ✅     |
 | BETWEEN                                    |    ✅     |
 | LIKE                                       |    ✅     |

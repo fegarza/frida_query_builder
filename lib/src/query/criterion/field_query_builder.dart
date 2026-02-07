@@ -1,7 +1,6 @@
 import 'package:frida_query_builder/src/query/common/query_builder.dart';
 import 'package:frida_query_builder/src/query/criterion/field.dart';
 import 'package:frida_query_builder/src/query/operators/operator.dart';
-import 'package:frida_query_builder/src/query/operators/operator_query_builder.dart';
 
 class FieldQueryBuilder extends QueryBuilder {
   Object? field;

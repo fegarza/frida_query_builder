@@ -1,5 +1,4 @@
 import 'package:frida_query_builder/frida_query_builder.dart';
-import 'package:frida_query_builder/src/query/operators/operator.dart';
 
 class Plus extends Operator {
   Plus({required Field left, required Field right})

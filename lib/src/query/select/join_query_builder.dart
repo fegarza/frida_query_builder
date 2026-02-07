@@ -20,7 +20,7 @@ class JoinQueryBuilder extends CriteriaQueryBuilder {
 
     if (criteriaStatement.criteria.isNotEmpty) {
       sb.writeln(
-        " ON ${CriteriaQueryBuilder(
+        " ON${CriteriaQueryBuilder(
           CriteriaStatement(
             join.source,
             criteria: join.criteria,

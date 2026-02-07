@@ -10,13 +10,13 @@ class ColumnQueryBuilder implements QueryBuilder {
   String build() {
     var sb = StringBuffer();
 
-    sb.write(" ${column.name} ${column.type.getString()} ");
+    sb.write("${column.name} ${column.type.getString()}");
     if (column.isNotNull) {
-      sb.write("NOT NULL ");
+      sb.write(" NOT NULL");
     }
 
     if (column.isAutoIncrement) {
-      sb.write("AUTO INCREMENT ");
+      sb.write(" AUTOINCREMENT");
     }
 
     if (column.defaultValue != null) {
@@ -24,7 +24,7 @@ class ColumnQueryBuilder implements QueryBuilder {
           ? '"${column.defaultValue}"'
           : "${column.defaultValue}";
 
-      sb.write('DEFAULT($defaultValue) ');
+      sb.write(' DEFAULT($defaultValue)');
     }
 
     return sb.toString();

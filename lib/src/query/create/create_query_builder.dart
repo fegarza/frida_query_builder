@@ -1,6 +1,9 @@
 import 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
 import 'package:frida_query_builder/src/query/create/column_query_builder.dart';
 import 'package:frida_query_builder/src/query/create/create.dart';
+import 'package:frida_query_builder/src/query/create/foreign_key.dart';
+import 'package:frida_query_builder/src/query/create/foreign_key_query_builder.dart';
+import 'package:frida_query_builder/src/query/create/primary_key_query_builder.dart';
 
 class CreateQueryBuilder extends FridaQueryBuilder {
   Create create;
@@ -10,52 +13,40 @@ class CreateQueryBuilder extends FridaQueryBuilder {
   @override
   String build() {
     var sb = StringBuffer();
-    sb.writeln("CREATE TABLE ${create.source} (");
-    sb.writeln(create.columns
-            .map((e) {
-              return ColumnQueryBuilder(e).build();
-            })
-            .toList()
-            .join(" ,\n") +
-        ",");
 
-    sb.writeln(
-      "PRIMARY KEY ( " +
-          create.columns
-              .where((element) => element.isPrimaryKey)
-              .map((e) => e.name)
-              .join(" , ") +
-          ")",
-    );
-    sb.writeln(");");
-    /*create.columns.asMap().forEach((index, column) {
-      bool isLastColumn = index == (create.columns.length - 1);
-      sb.writeln(
-        ColumnDefinitionBuilder(
-          column,
-          includeComa:
-              (!isLastColumn) || (isLastColumn && _isCompositePrimaryKey),
-          includePrimaryKey: !_isCompositePrimaryKey,
-        ).build(),
-      );
-    });
+    final tableName = create.source;
 
-    if (_isCompositePrimaryKey) {
-      var sbCompositeKey = StringBuffer();
-      sbCompositeKey.write("  PRIMARY KEY(");
-      List<Column> primaryKeys =
-          table.columns.where((element) => element.isPrimaryKey).toList();
+    sb.writeln("CREATE TABLE $tableName(");
 
-      primaryKeys.asMap().forEach((indice, primaryKey) {
-        bool isLastItem = indice == (primaryKeys.length - 1);
-        String coma = isLastItem ? "" : ", ";
-        sbCompositeKey.write("${primaryKey.name}$coma");
-      });
-      sbCompositeKey.write(")");
-      sb.writeln(sbCompositeKey);
+    final definitionsBuilders = [];
+
+    definitionsBuilders
+        .addAll(create.columns.map((e) => ColumnQueryBuilder(e)));
+
+    definitionsBuilders.add(PrimaryKeyQueryBuilder(
+        create.columns.where((w) => w.isPrimaryKey).toList()));
+
+    var foreignKeyColumns =
+        create.columns.where((w) => w.foreignKey != null).toList();
+
+    if (foreignKeyColumns.isNotEmpty) {
+      definitionsBuilders.add(ForeignKeyQueryBuilder(foreignKeyColumns));
     }
 
-    sb.writeln(");");*/
+    sb.writeln(definitionsBuilders.map((e) => " " + e.build()).join(",\n"));
+
+    sb.write(");");
+
+    return sb.toString();
+  }
+
+  String _buildColumnsDefinitions() {
+    var sb = StringBuffer();
+
+    sb.write(create.columns
+        .map((e) => " " + ColumnQueryBuilder(e).build())
+        .join(",\n"));
+
     return sb.toString();
   }
 }

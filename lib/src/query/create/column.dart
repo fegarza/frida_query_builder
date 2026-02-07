@@ -1,4 +1,5 @@
 import 'package:frida_query_builder/src/query/create/column_data_type.dart';
+import 'package:frida_query_builder/src/query/create/foreign_key.dart';
 export 'package:frida_query_builder/src/query/create/column_data_type.dart';
 
 class Column {
@@ -8,6 +9,7 @@ class Column {
   bool isNotNull;
   bool isAutoIncrement;
   String? defaultValue;
+  ForeignKey? foreignKey;
 
   Column({
     required this.name,
@@ -16,5 +18,6 @@ class Column {
     this.isNotNull = false,
     this.isAutoIncrement = false,
     this.defaultValue,
+    this.foreignKey
   });
 }

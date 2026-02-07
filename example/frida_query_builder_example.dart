@@ -50,6 +50,12 @@ void main() {
   print(contactsTable.build() + "\n");
   print(transactionsTable.build() + "\n");
 
+  var alterTable = AddColumn(
+    "contacts",
+    ColumnText(name: "phone"),
+  );
+  print(FridaQueryBuilder(alterTable).build() + "\n");
+
 // Insert data
   final insertContact = Insert(
     into: "contacts",

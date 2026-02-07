@@ -8,7 +8,7 @@ void main() {
         table: 'users',
         values: {'status': 'active'},
       );
-      expect(query.build(), equals('UPDATE users SET status = "active" \n'));
+      expect(query.build(), equals('UPDATE users SET status = "active" ;'));
     });
 
     test('Update with WHERE clause', () {
@@ -20,7 +20,7 @@ void main() {
 
       final sql = query.build();
       expect(sql, startsWith('UPDATE users SET status = "inactive"'));
-      expect(sql, contains('WHERE id = 1'));
+      expect(sql, contains('WHERE id = 1 ;'));
     });
 
     test('Update multiple columns', () {

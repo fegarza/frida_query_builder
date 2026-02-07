@@ -18,7 +18,50 @@ import 'package:frida_query_builder/src/query/criterion/criterion_compare_query_
 import 'package:frida_query_builder/src/query/criterion/criterion_compare.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_login.dart';
 
+import 'package:frida_query_builder/src/query/alter/alter.dart';
+import 'package:frida_query_builder/src/query/alter/add_column.dart';
+import 'package:frida_query_builder/src/query/alter/drop_column.dart';
+import 'package:frida_query_builder/src/query/alter/drop_table.dart';
+import 'package:frida_query_builder/src/query/alter/rename_column.dart';
+import 'package:frida_query_builder/src/query/alter/rename_table.dart';
+
 class SqlRenderer implements StatementVisitor<String> {
+  @override
+  String visitAlter(Alter statement) {
+    var sb = StringBuffer();
+
+    if (statement is RenameTable) {
+      sb.write(
+          "ALTER TABLE ${statement.source} RENAME TO ${statement.newName};");
+      return sb.toString();
+    }
+
+    if (statement is AddColumn) {
+      sb.write(
+          "ALTER TABLE ${statement.source} ADD COLUMN ${ColumnQueryBuilder(statement.column).build()};");
+      return sb.toString();
+    }
+
+    if (statement is RenameColumn) {
+      sb.write(
+          "ALTER TABLE ${statement.source} RENAME COLUMN ${statement.oldName} TO ${statement.newName};");
+      return sb.toString();
+    }
+
+    if (statement is DropColumn) {
+      sb.write(
+          "ALTER TABLE ${statement.source} DROP COLUMN ${statement.columnName};");
+      return sb.toString();
+    }
+
+    if (statement is DropTable) {
+      sb.write("DROP TABLE ${statement.source};");
+      return sb.toString();
+    }
+
+    return sb.toString();
+  }
+
   @override
   String visitCreate(Create statement) {
     var sb = StringBuffer();
@@ -119,10 +162,11 @@ class SqlRenderer implements StatementVisitor<String> {
   String visitUpdate(Update statement) {
     StringBuffer sb = StringBuffer();
 
-    sb.writeln("UPDATE ${statement.source} SET ${_buildSetString(statement)}");
+    sb.write("UPDATE ${statement.source} SET ${_buildSetString(statement)}");
 
     if (statement.criteria.isNotEmpty) {
-      sb.writeln("WHERE${visitCriteria(CriteriaStatement(
+      sb.write("\n");
+      sb.write("WHERE${visitCriteria(CriteriaStatement(
         statement.source,
         criteria: statement.criteria,
       ))}");
@@ -136,10 +180,11 @@ class SqlRenderer implements StatementVisitor<String> {
   String visitDelete(Delete statement) {
     StringBuffer sb = StringBuffer();
 
-    sb.writeln("DELETE FROM ${statement.source} ");
+    sb.write("DELETE FROM ${statement.source}");
 
     if (statement.criteria.isNotEmpty) {
-      sb.writeln("WHERE${visitCriteria(CriteriaStatement(
+      sb.write("\n");
+      sb.write("WHERE${visitCriteria(CriteriaStatement(
         statement.source,
         criteria: statement.criteria,
       ))}");

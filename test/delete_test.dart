@@ -5,7 +5,7 @@ void main() {
   group('Delete Query Tests', () {
     test('Delete all rows', () {
       final query = Delete(table: 'temp_logs');
-      expect(query.build(), equals('DELETE FROM temp_logs \n'));
+      expect(query.build(), equals('DELETE FROM temp_logs;'));
     });
 
     test('Delete with WHERE clause', () {
@@ -14,8 +14,8 @@ void main() {
         criteria: [Equals('id'.field, 100)],
       );
       final sql = query.build();
-      expect(sql, startsWith('DELETE FROM users'));
-      expect(sql, contains('WHERE id = 100'));
+      expect(sql, startsWith('DELETE FROM users\n'));
+      expect(sql, contains('WHERE id = 100 ;'));
     });
 
     test('Delete with complex criteria', () {

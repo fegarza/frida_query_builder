@@ -1,4 +1,5 @@
 export 'operators/and.dart';
+export 'operators/between.dart';
 export 'operators/equals.dart';
 export 'operators/in.dart';
 export 'operators/like.dart';

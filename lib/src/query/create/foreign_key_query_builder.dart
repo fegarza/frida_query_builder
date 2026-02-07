@@ -27,7 +27,7 @@ class ForeignKeyQueryBuilder implements QueryBuilder {
           fkColumns.map((e) => e.name).join(", ") +
           ") REFERENCES " +
           tableName +
-          " (" +
+          "(" +
           fkColumns.map((e) => e.foreignKey!.referencedColumn).join(", ") +
           ")";
 

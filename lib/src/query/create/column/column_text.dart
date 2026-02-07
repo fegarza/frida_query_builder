@@ -8,6 +8,7 @@ class ColumnText extends Column {
       {required String name,
       bool isPrimaryKey = false,
       bool isNotNull = false,
+      bool isUnique = false,
       String? defaultValue,
       ForeignKey? foreignKey,
       List<Criterion>? checkConstraints})
@@ -16,6 +17,7 @@ class ColumnText extends Column {
             type: ColumnDataType.text,
             isPrimaryKey: isPrimaryKey,
             isNotNull: isNotNull,
+            isUnique: isUnique,
             isAutoIncrement: false,
             defaultValue: defaultValue,
             foreignKey: foreignKey,

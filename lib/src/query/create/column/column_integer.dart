@@ -7,6 +7,7 @@ class ColumnInteger extends Column {
       {required String name,
       bool isPrimaryKey = false,
       bool isNotNull = false,
+      bool isUnique = false,
       bool isAutoIncrement = false,
       int? defaultValue,
       ForeignKey? foreignKey})
@@ -15,6 +16,7 @@ class ColumnInteger extends Column {
             type: ColumnDataType.integer,
             isPrimaryKey: isPrimaryKey,
             isNotNull: isNotNull,
+            isUnique: isUnique,
             isAutoIncrement: isAutoIncrement,
             defaultValue: defaultValue?.toString(),
             foreignKey: foreignKey);

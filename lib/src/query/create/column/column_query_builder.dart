@@ -18,6 +18,10 @@ class ColumnQueryBuilder implements QueryBuilder {
       sb.write(" NOT NULL");
     }
 
+    if (column.isUnique) {
+      sb.write(" UNIQUE");
+    }
+
     if (column.isAutoIncrement) {
       sb.write(" PRIMARY KEY AUTOINCREMENT");
     }

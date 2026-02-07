@@ -1,8 +1,8 @@
-export 'and.dart';
-export 'equals.dart';
-export 'in.dart';
-export 'like.dart';
-export 'not_equals.dart';
-export 'or.dart';
+export 'operators/and.dart';
+export 'operators/equals.dart';
+export 'operators/in.dart';
+export 'operators/like.dart';
+export 'operators/not_equals.dart';
+export 'operators/or.dart';
 export 'criterion.dart';
 export 'field.dart';

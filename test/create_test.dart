@@ -32,7 +32,7 @@ void main() {
         tableName: 'products',
         columns: [
           ColumnInteger(name: 'id', isPrimaryKey: true, isAutoIncrement: true),
-          ColumnText(name: 'name', isNotNull: true),
+          ColumnText(name: 'name', isNotNull: true, isUnique: true),
           ColumnReal(name: 'price', defaultValue: 0.00),
           ColumnBlob(name: 'image'),
         ],
@@ -41,7 +41,7 @@ void main() {
       final sql = query.build();
       expect(sql, contains('CREATE TABLE products'));
       expect(sql, contains('id INTEGER PRIMARY KEY AUTOINCREMENT'));
-      expect(sql, contains('name TEXT NOT NULL'));
+      expect(sql, contains('name TEXT NOT NULL UNIQUE'));
       expect(sql, contains('price REAL DEFAULT(0.00)'));
       expect(sql, contains('image BLOB'));
     });

@@ -9,6 +9,7 @@ abstract class Column {
   bool isNotNull;
   bool isAutoIncrement;
   String? defaultValue;
+  bool isUnique;
   ForeignKey? foreignKey;
   List<Criterion>? checkConstraints;
 
@@ -19,6 +20,7 @@ abstract class Column {
       this.isNotNull = false,
       this.isAutoIncrement = false,
       this.defaultValue,
+      this.isUnique = false,
       this.foreignKey,
       this.checkConstraints});
 }

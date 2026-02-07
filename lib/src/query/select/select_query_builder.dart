@@ -33,6 +33,7 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
         criteria: select.criteria,
       )).build()}");
     }
+
     if (select.groupBy.isNotEmpty) {
       sb.writeln(_buildGroupBy());
       if (select.having.isNotEmpty) {

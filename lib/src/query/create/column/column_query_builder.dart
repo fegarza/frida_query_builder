@@ -1,6 +1,8 @@
+import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
 import 'package:frida_query_builder/src/query/common/query_builder.dart';
 import 'package:frida_query_builder/src/query/create/column/column.dart';
 import 'package:frida_query_builder/src/query/create/column/column_data_type.dart';
+import 'package:frida_query_builder/src/query/criterion/criteria_query_builder.dart';
 
 class ColumnQueryBuilder implements QueryBuilder {
   Column column;
@@ -26,6 +28,13 @@ class ColumnQueryBuilder implements QueryBuilder {
           : "${column.defaultValue}";
 
       sb.write(' DEFAULT($defaultValue)');
+    }
+
+    if (column.checkConstraints != null &&
+        column.checkConstraints!.isNotEmpty) {
+      sb.write(" CHECK(${CriteriaQueryBuilder(
+        CriteriaStatement(column.name, criteria: column.checkConstraints!),
+      ).build()})");
     }
 
     return sb.toString();

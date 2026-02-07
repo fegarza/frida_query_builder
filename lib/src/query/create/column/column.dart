@@ -1,5 +1,7 @@
 import 'package:frida_query_builder/src/query/create/column/column_data_type.dart';
 import 'package:frida_query_builder/src/query/create/foreign_key.dart';
+import 'package:frida_query_builder/src/query/criterion/all.dart';
+import 'package:frida_query_builder/src/query/criterion/criterion_compare.dart';
 
 abstract class Column {
   String name;
@@ -9,6 +11,7 @@ abstract class Column {
   bool isAutoIncrement;
   String? defaultValue;
   ForeignKey? foreignKey;
+  List<Criterion>? checkConstraints;
 
   Column(
       {required this.name,
@@ -17,5 +20,6 @@ abstract class Column {
       this.isNotNull = false,
       this.isAutoIncrement = false,
       this.defaultValue,
-      this.foreignKey});
+      this.foreignKey,
+      this.checkConstraints});
 }

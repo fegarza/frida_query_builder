@@ -93,12 +93,15 @@ void main() {
           Equals(
             "transactions.contact_id".field,
             "contacts.id".field,
-          ),
+          )
         ],
       ),
     ],
     where: [
       GreaterThan("transactions.amount".field, 50),
+      And([
+        Between("transactions.amount".field, 40, 100),
+      ]),
     ],
     groupBy: ["contacts.name"],
     limit: 10,

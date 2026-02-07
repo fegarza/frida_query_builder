@@ -40,6 +40,7 @@ export 'package:frida_query_builder/src/query/criterion/criterion.dart';
 export 'package:frida_query_builder/src/query/criterion/field.dart';
 export 'package:frida_query_builder/src/query/criterion/criterion_login.dart'; // Logic
 export 'package:frida_query_builder/src/query/criterion/operators/and.dart';
+export 'package:frida_query_builder/src/query/criterion/operators/between.dart';
 export 'package:frida_query_builder/src/query/criterion/operators/equals.dart';
 export 'package:frida_query_builder/src/query/criterion/operators/greater_equal_than.dart';
 export 'package:frida_query_builder/src/query/criterion/operators/greater_than.dart';

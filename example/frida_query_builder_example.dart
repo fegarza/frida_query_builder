@@ -100,7 +100,7 @@ void main() {
     where: [
       Not([LessThan(Length("transactions.title"), 15)]),
       And([
-        Between("transactions.amount".field, 40, 100),
+        Between("transactions.amount".field.plus(10.field), 40, 100),
         Between("transactions.amount".field, 40, 100),
       ]),
     ],
@@ -109,6 +109,53 @@ void main() {
   );
 
   print(FridaQueryBuilder(query).build() + "\n");
+
+// Arithmetic Operators
+  print("=== Arithmetic Operators Examples ===\n");
+
+  // Calculate total with tax
+  final orderQuery = Select(
+    from: "orders",
+    columns: [
+      "product_name".field,
+      "price".field,
+      "quantity".field,
+      "price".field.multiply("quantity".field).as("subtotal"),
+      "price"
+          .field
+          .multiply("quantity".field)
+          .multiply("tax_rate".field)
+          .as("tax"),
+      "price"
+          .field
+          .multiply("quantity".field)
+          .plus("price"
+              .field
+              .multiply("quantity".field)
+              .multiply("tax_rate".field))
+          .as("total"),
+    ],
+  );
+  print(FridaQueryBuilder(orderQuery).build() + "\n");
+
+  // Calculate average price
+  final avgQuery = Select(
+    from: "products",
+    columns: [
+      "total_revenue".field.divide("total_sales".field).as("avg_price"),
+    ],
+  );
+  print(FridaQueryBuilder(avgQuery).build() + "\n");
+
+  // Modulo example for pagination
+  final paginationQuery = Select(
+    from: "items",
+    columns: [
+      "id".field,
+      "id".field.modulo(Field("10")).as("page_position"),
+    ],
+  );
+  print(FridaQueryBuilder(paginationQuery).build() + "\n");
 
 // Delete
   final deleteContact = Delete(

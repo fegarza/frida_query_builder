@@ -60,3 +60,11 @@ export 'package:frida_query_builder/src/query/functions/max.dart';
 export 'package:frida_query_builder/src/query/functions/min.dart';
 export 'package:frida_query_builder/src/query/functions/sum.dart';
 export 'package:frida_query_builder/src/query/functions/avg.dart';
+
+// Operators
+export 'package:frida_query_builder/src/query/operators/operator.dart';
+export 'package:frida_query_builder/src/query/operators/plus.dart';
+export 'package:frida_query_builder/src/query/operators/minus.dart';
+export 'package:frida_query_builder/src/query/operators/multiply.dart';
+export 'package:frida_query_builder/src/query/operators/divide.dart';
+export 'package:frida_query_builder/src/query/operators/modulo.dart';

@@ -21,7 +21,7 @@ class JoinQueryBuilder extends CriteriaQueryBuilder {
     if (criteriaStatement.criteria.isNotEmpty) {
       sb.write("\n");
       sb.write(
-        " ON${CriteriaQueryBuilder(
+        " ON ${CriteriaQueryBuilder(
           CriteriaStatement(
             join.source,
             criteria: join.criteria,

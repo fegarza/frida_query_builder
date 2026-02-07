@@ -15,7 +15,7 @@ void main() {
       );
       final sql = query.build();
       expect(sql, startsWith('DELETE FROM users\n'));
-      expect(sql, contains('WHERE id = 100 ;'));
+      expect(sql, contains('WHERE id = 100;'));
     });
 
     test('Delete with complex criteria', () {
@@ -27,7 +27,7 @@ void main() {
       // Adjust expectation based on actual output format if needed.
       final sql = query.build();
       expect(sql, contains('created_at < "2023-01-01"'));
-      expect(sql, contains('OR( status = "archived" )'));
+      expect(sql, contains('OR(status = "archived")'));
     });
   });
 }

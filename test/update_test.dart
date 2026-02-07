@@ -20,7 +20,7 @@ void main() {
 
       final sql = query.build();
       expect(sql, startsWith('UPDATE users SET status = "inactive"'));
-      expect(sql, contains('WHERE id = 1 ;'));
+      expect(sql, contains('WHERE id = 1;'));
     });
 
     test('Update multiple columns', () {

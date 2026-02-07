@@ -128,7 +128,7 @@ class SqlRenderer implements StatementVisitor<String> {
     if (statement.criteria.isNotEmpty) {
       sb.write("\n");
       // Recursively visit criteria
-      sb.write("WHERE${visitCriteria(CriteriaStatement(
+      sb.write("WHERE ${visitCriteria(CriteriaStatement(
         statement.source,
         criteria: statement.criteria,
       ))}");
@@ -138,7 +138,7 @@ class SqlRenderer implements StatementVisitor<String> {
       sb.write("\n");
       sb.write(_buildGroupBy(statement));
       if (statement.having.isNotEmpty) {
-        sb.write(" HAVING${visitCriteria(CriteriaStatement(
+        sb.write(" HAVING ${visitCriteria(CriteriaStatement(
           statement.source,
           criteria: statement.having,
         ))}");
@@ -166,7 +166,7 @@ class SqlRenderer implements StatementVisitor<String> {
 
     if (statement.criteria.isNotEmpty) {
       sb.write("\n");
-      sb.write("WHERE${visitCriteria(CriteriaStatement(
+      sb.write("WHERE ${visitCriteria(CriteriaStatement(
         statement.source,
         criteria: statement.criteria,
       ))}");
@@ -184,7 +184,7 @@ class SqlRenderer implements StatementVisitor<String> {
 
     if (statement.criteria.isNotEmpty) {
       sb.write("\n");
-      sb.write("WHERE${visitCriteria(CriteriaStatement(
+      sb.write("WHERE ${visitCriteria(CriteriaStatement(
         statement.source,
         criteria: statement.criteria,
       ))}");
@@ -210,7 +210,7 @@ class SqlRenderer implements StatementVisitor<String> {
 
       if (criteria is CriterionCompare) {
         if (!isFirstIteration) {
-          sb.write("AND");
+          sb.write(" AND ");
         }
         sb.write(
           CriterionCompareQueryBuilder(

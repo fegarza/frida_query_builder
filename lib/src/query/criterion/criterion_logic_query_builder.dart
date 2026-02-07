@@ -20,7 +20,7 @@ class CriterionLogicQueryBuilder extends CriterionQueryBuilder {
       return "";
     }
 
-    sb.write("${criterionLogic.criterionOperator}(");
+    sb.write(" ${criterionLogic.criterionOperator}(");
 
     sb.write(
       CriteriaQueryBuilder(

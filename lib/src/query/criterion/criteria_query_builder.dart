@@ -31,8 +31,8 @@ class CriteriaQueryBuilder extends FridaQueryBuilder {
 
   String _buildCriteriaString() {
     var sb = StringBuffer();
-    bool isFirstIteration = true;
 
+    bool isFirstIteration = true;
     for (final criteria in criteriaStatement.criteria) {
       if (criteria is CriterionLogic) {
         sb.write(
@@ -44,7 +44,7 @@ class CriteriaQueryBuilder extends FridaQueryBuilder {
 
       if (criteria is CriterionCompare) {
         if (!isFirstIteration) {
-          sb.write("AND");
+          sb.write(" AND ");
         }
         sb.write(
           CriterionCompareQueryBuilder(
@@ -54,7 +54,7 @@ class CriteriaQueryBuilder extends FridaQueryBuilder {
           ).build(),
         );
       }
-      
+
       isFirstIteration = false;
     }
 

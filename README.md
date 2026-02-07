@@ -10,78 +10,154 @@ Its goal is to provide a minimal abstraction layer that allows developers to cre
 
 **Frida is built for developers who:**
 
-- Want explicit and predictable SQL
-- Do not need automatic migrations or generated models
-- Prefer simplicity over feature-heavy ORMs
-- Work with SQLite in local applications (Flutter or pure Dart)
+-   Want explicit and predictable SQL
+-   Do not need automatic migrations or generated models
+-   Prefer simplicity over feature-heavy ORMs
+-   Work with SQLite in local applications (Flutter or pure Dart)
 
 Frida Query Builder does not try to hide SQL—instead, it makes it more readable, reusable, and safer, reducing common string-concatenation errors and improving code maintainability.
 
-## Examples
+## 📦 Installation
 
-DDL
+Add `frida_query_builder` to your `pubspec.yaml`:
 
-```dart
-
-final createUsers = Create(
-    tableName: "users",
-    columns: [
-      ColumnInteger(
-        name: "id",
-        isPrimaryKey: true,
-        isAutoIncrement: true,
-      ),
-      ColumnText(
-        name: "name",
-        isNotNull: true,
-      ),
-    ],
-  );
-  print(FridaQueryBuilder(createUsers).build());
-
-  /* Output:
-  CREATE TABLE users(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
-  );
-  */
+```yaml
+dependencies:
+  frida_query_builder: ^1.2.0
 ```
 
- 
-DML
+Or install it via command line:
+
+```bash
+dart pub add frida_query_builder
+```
+
+## 🚀 Examples
+
+### Creating Tables (DDL)
 
 ```dart
-// Insert
+final createUsers = Create(
+  tableName: "users",
+  columns: [
+    ColumnInteger(
+      name: "id",
+      isPrimaryKey: true,
+      isAutoIncrement: true,
+    ),
+    ColumnText(
+      name: "name",
+      isNotNull: true,
+    ),
+    ColumnInteger(
+        name: "role_id",
+        foreignKey: ForeignKey(
+          referencedTable: "roles",
+          referencedColumn: "id",
+        ),
+    ),
+  ],
+);
+
+print(createUsers.build());
+
+/* Output:
+CREATE TABLE users(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  role_id INTEGER,
+  FOREIGN KEY (role_id) REFERENCES roles (id)
+);
+*/
+```
+
+### Modifying Tables (Alter)
+
+```dart
+// Add a new column
+final addColumn = AddColumn(
+  "users",
+  ColumnText(name: "email", isNotNull: true),
+);
+print(addColumn.build());
+// Output: ALTER TABLE users ADD COLUMN email TEXT NOT NULL;
+
+// Rename a table
+final renameTable = RenameTable("users", "cool_users");
+print(renameTable.build());
+// Output: ALTER TABLE users RENAME TO cool_users;
+```
+
+### Inserting Data (DML)
+
+```dart
 final insertUser = Insert(
   into: "users",
   values: {
     "name": "Felipe",
+    "email": "felipe@example.com"
   },
 );
 
-print(FridaQueryBuilder(insertUser).build());
-
-  /* Output:
-  INSERT INTO users(name) VALUES("Felipe");
-  */
+print(insertUser.build());
+/* Output:
+INSERT INTO users(name, email) VALUES("Felipe", "felipe@example.com");
+*/
 ```
 
-DQL
+### Querying Data (Select)
 
 ```dart
-// Select
-final selectUsers = Select(
-  from: "users",
-  columns: ["id".field, "name".field],
+final select = Select(
+  from: "transactions",
+  columns: [
+    "transactions.id".field,
+    "transactions.amount".field,
+    "users.name".field.as("user_name"),
+  ],
+  joins: [
+     Join(
+        "users",
+        type: JoinType.inner,
+        criteria: [
+           Equals("transactions.user_id".field, "users.id".field)
+        ]
+     )
+  ],
+  where: [
+    GreaterThan("amount".field, 100),
+    Or([
+        Equals("status".field, "completed"),
+        Like("reference".field, "PAY-%")
+    ])
+  ],
+  limit: 10,
+  offset: 0
 );
 
+print(select.build());
 
-print(FridaQueryBuilder(selectUsers).build());
+/* Output:
+SELECT transactions.id, transactions.amount, users.name AS user_name
+FROM transactions
+INNER JOIN users ON transactions.user_id = users.id
+WHERE amount > 100 AND (status = 'completed' OR reference LIKE 'PAY-%')
+LIMIT 10 OFFSET 0;
+*/
+```
 
-  /* Output:
-  SELECT id, name
-  FROM users;
-  */
+### Deleting Data
+
+```dart
+final delete = Delete(
+  table: "users",
+  criteria: [
+    Equals("id".field, 123)
+  ]
+);
+
+print(delete.build());
+// Output: DELETE FROM users WHERE id = 123;
 ```
 
 ## 📖 Supported SQLite Functionalities
@@ -89,84 +165,86 @@ print(FridaQueryBuilder(selectUsers).build());
 **Data types**
 
 | Functionality | Supported |
-| ------------- | --------- |
-| INTEGER       | ✅        |
-| REAL          | ✅        |
-| TEXT          | ✅        |
-| BLOB          | ✅        |
+| ------------- | :-------: |
+| INTEGER       |    ✅     |
+| REAL          |    ✅     |
+| TEXT          |    ✅     |
+| BLOB          |    ✅     |
 
 **Data definition**
 
 | Functionality                    | Supported |
-| -------------------------------- | --------- |
-| CREATE TABLE                     | ✅        |
-| DROP TABLE                       | ❌        |
-| ALTER TABLE (rename, add column) | ❌        |
+| -------------------------------- | :-------: |
+| CREATE TABLE                     |    ✅     |
+| DROP TABLE                       |    ✅     |
+| ALTER TABLE (rename, add column) |    ✅     |
+| DROP COLUMN                      |    ✅     |
+| RENAME COLUMN                    |    ✅     |
 
 **Data Manipulation**
 
 | Functionality               | Supported |
-| --------------------------- | --------- |
-| INSERT INTO (single row)    | ✅        |
-| INSERT INTO (multiple rows) | ❌        |
-| UPDATE (with WHERE)         | ✅        |
-| DELETE (with WHERE)         | ✅        |
+| --------------------------- | :-------: |
+| INSERT INTO (single row)    |    ✅     |
+| INSERT INTO (multiple rows) |    ❌     |
+| UPDATE (with WHERE)         |    ✅     |
+| DELETE (with WHERE)         |    ✅     |
 
 **Querying (SELECT)**
 
 | Functionality                                   | Supported |
-| ----------------------------------------------- | --------- |
-| SELECT (specific columns / \*)                  | ✅        |
-| DISTINCT                                        | ✅        |
-| WHERE conditions                                | ✅        |
-| ORDER BY                                        | ✅        |
-| GROUP BY + HAVING                               | ✅        |
-| LIMIT + OFFSET                                  | ✅        |
-| INNER JOIN                                      | ✅        |
-| LEFT JOIN                                       | ✅        |
-| Subqueries (WHERE, FROM, SELECT)                | ❌        |
-| Aggregate functions (COUNT, SUM, AVG, MIN, MAX) | ✅        |
+| ----------------------------------------------- | :-------: |
+| SELECT (specific columns / \*)                  |    ✅     |
+| DISTINCT                                        |    ✅     |
+| WHERE conditions                                |    ✅     |
+| ORDER BY                                        |    ✅     |
+| GROUP BY + HAVING                               |    ✅     |
+| LIMIT + OFFSET                                  |    ✅     |
+| INNER JOIN                                      |    ✅     |
+| LEFT JOIN                                       |    ✅     |
+| Subqueries (WHERE, FROM, SELECT)                |    ❌     |
+| Aggregate functions (COUNT, SUM, AVG, MIN, MAX) |    ✅     |
 
 **Constraints & Expr.**
 
 | Functionality                              | Supported |
-| ------------------------------------------ | --------- |
-| CHECK                                      | ✅        |
-| NOT NULL                                   | ❌        |
-| DEFAULT                                    | ✅        |
-| UNIQUE                                     | ❌        |
-| PRIMARY KEY                                | ✅        |
-| FOREIGN KEY                                | ✅        |
-| Arithmetic operators (+, -, \*, /)         | ❌        |
-| Comparison operators (=, <>, <, <=, >, >=) | ✅        |
-| AND                                        | ✅        |
-| OR                                         | ✅        |
-| NOT                                        | ❌        |
-| IN                                         | ✅        |
-| BETWEEN                                    | ❌        |
-| LIKE                                       | ✅        |
+| ------------------------------------------ | :-------: |
+| CHECK                                      |    ✅     |
+| NOT NULL                                   |    ✅     |
+| DEFAULT                                    |    ✅     |
+| UNIQUE                                     |    ✅     |
+| PRIMARY KEY                                |    ✅     |
+| FOREIGN KEY                                |    ✅     |
+| Arithmetic operators (+, -, \*, /)         |    ❌     |
+| Comparison operators (=, <>, <, <=, >, >=) |    ✅     |
+| AND                                        |    ✅     |
+| OR                                         |    ✅     |
+| NOT                                        |    ❌     |
+| IN                                         |    ✅     |
+| BETWEEN                                    |    ✅     |
+| LIKE                                       |    ✅     |
 
 **Transactions**
 
 | Functionality     | Supported |
-| ----------------- | --------- |
-| BEGIN TRANSACTION | ❌        |
-| COMMIT            | ❌        |
-| ROLLBACK          | ❌        |
-| CREATE INDEX      | ❌        |
-| DROP INDEX        | ❌        |
-| Unique indexes    | ❌        |
+| ----------------- | :-------: |
+| BEGIN TRANSACTION |    ❌     |
+| COMMIT            |    ❌     |
+| ROLLBACK          |    ❌     |
+| CREATE INDEX      |    ❌     |
+| DROP INDEX        |    ❌     |
+| Unique indexes    |    ❌     |
 
 **Advanced**
 
 | Functionality           | Supported |
-| ----------------------- | --------- |
-| WITH (CTE)              | ❌        |
-| Window functions        | ❌        |
-| Full-text search (FTS5) | ❌        |
-| JSON functions          | ❌        |
+| ----------------------- | :-------: |
+| WITH (CTE)              |    ❌     |
+| Window functions        |    ❌     |
+| Full-text search (FTS5) |    ❌     |
+| JSON functions          |    ❌     |
 
-## 📄 UML Diagram classes
+## 📄 UML Class Diagrams
 
 <details>
 <summary>Statements classes</summary>

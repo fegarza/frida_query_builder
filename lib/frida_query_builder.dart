@@ -51,6 +51,7 @@ export 'package:frida_query_builder/src/query/criterion/operators/less_than.dart
 export 'package:frida_query_builder/src/query/criterion/operators/like.dart';
 export 'package:frida_query_builder/src/query/criterion/operators/not_equals.dart';
 export 'package:frida_query_builder/src/query/criterion/operators/or.dart';
+export 'package:frida_query_builder/src/query/criterion/operators/not.dart';
 
 // Functions
 export 'package:frida_query_builder/src/query/functions/count.dart';

@@ -20,12 +20,12 @@ class CriterionCompareQueryBuilder extends CriterionQueryBuilder {
   String build() {
     criterion = criterion as CriterionCompare;
 
-    return " ${FieldQueryBuilder(
+    return "${FieldQueryBuilder(
       criterionCompare.firstField,
       quoted: firstFieldQuoted,
     ).build()} ${criterionCompare.criterionOperator} ${FieldQueryBuilder(
       criterionCompare.secondField,
       quoted: secondFieldQuoted,
-    ).build()} ";
+    ).build()}";
   }
 }

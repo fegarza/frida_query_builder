@@ -98,8 +98,9 @@ void main() {
       ),
     ],
     where: [
-      GreaterThan("transactions.amount".field, 50),
+      Not([LessThan(Length("transactions.title"), 15)]),
       And([
+        Between("transactions.amount".field, 40, 100),
         Between("transactions.amount".field, 40, 100),
       ]),
     ],

@@ -1,6 +1,6 @@
-<div style="text-align:center; border-radius:50%; ">
+<p align="center">
   <img src='https://i.imgur.com/tJRrDrh.png' width='250px'/>
-</div>
+</p>
 
 # 🔨 Frida query builder
 

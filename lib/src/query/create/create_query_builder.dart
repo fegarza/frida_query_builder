@@ -23,8 +23,10 @@ class CreateQueryBuilder extends FridaQueryBuilder {
     definitionsBuilders
         .addAll(create.columns.map((e) => ColumnQueryBuilder(e)));
 
-    definitionsBuilders.add(PrimaryKeyQueryBuilder(
-        create.columns.where((w) => w.isPrimaryKey).toList()));
+    if (create.columns.where((w) => w.isAutoIncrement).isEmpty) {
+      definitionsBuilders.add(PrimaryKeyQueryBuilder(
+          create.columns.where((w) => w.isPrimaryKey).toList()));
+    }
 
     var foreignKeyColumns =
         create.columns.where((w) => w.foreignKey != null).toList();

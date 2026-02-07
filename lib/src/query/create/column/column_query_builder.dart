@@ -17,7 +17,7 @@ class ColumnQueryBuilder implements QueryBuilder {
     }
 
     if (column.isAutoIncrement) {
-      sb.write(" AUTO INCREMENT");
+      sb.write(" PRIMARY KEY AUTOINCREMENT");
     }
 
     if (column.defaultValue != null) {

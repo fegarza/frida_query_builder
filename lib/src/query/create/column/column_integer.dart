@@ -1,0 +1,21 @@
+import "package:frida_query_builder/src/query/create/column/column.dart";
+import "package:frida_query_builder/src/query/create/foreign_key.dart";
+import 'package:frida_query_builder/src/query/create/column/column_data_type.dart';
+
+class ColumnInteger extends Column {
+  ColumnInteger(
+      {required String name,
+      bool isPrimaryKey = false,
+      bool isNotNull = false,
+      bool isAutoIncrement = false,
+      int? defaultValue,
+      ForeignKey? foreignKey})
+      : super(
+            name: name,
+            type: ColumnDataType.integer,
+            isPrimaryKey: isPrimaryKey,
+            isNotNull: isNotNull,
+            isAutoIncrement: isAutoIncrement,
+            defaultValue: defaultValue?.toString(),
+            foreignKey: foreignKey);
+}

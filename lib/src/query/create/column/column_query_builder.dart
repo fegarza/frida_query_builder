@@ -1,5 +1,6 @@
 import 'package:frida_query_builder/src/query/common/query_builder.dart';
-import 'package:frida_query_builder/src/query/create/column.dart';
+import 'package:frida_query_builder/src/query/create/column/column.dart';
+import 'package:frida_query_builder/src/query/create/column/column_data_type.dart';
 
 class ColumnQueryBuilder implements QueryBuilder {
   Column column;
@@ -16,7 +17,7 @@ class ColumnQueryBuilder implements QueryBuilder {
     }
 
     if (column.isAutoIncrement) {
-      sb.write(" AUTOINCREMENT");
+      sb.write(" AUTO INCREMENT");
     }
 
     if (column.defaultValue != null) {

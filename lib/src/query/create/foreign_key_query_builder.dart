@@ -1,5 +1,5 @@
 import 'package:frida_query_builder/src/query/common/query_builder.dart';
-import 'package:frida_query_builder/src/query/create/column.dart';
+import 'package:frida_query_builder/src/query/create/column/column.dart';
 
 class ForeignKeyQueryBuilder implements QueryBuilder {
   List<Column> columns;

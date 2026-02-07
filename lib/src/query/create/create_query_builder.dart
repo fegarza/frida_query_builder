@@ -1,5 +1,5 @@
 import 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
-import 'package:frida_query_builder/src/query/create/column_query_builder.dart';
+import 'package:frida_query_builder/src/query/create/column/column_query_builder.dart';
 import 'package:frida_query_builder/src/query/create/create.dart';
 import 'package:frida_query_builder/src/query/create/foreign_key.dart';
 import 'package:frida_query_builder/src/query/create/foreign_key_query_builder.dart';

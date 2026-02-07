@@ -47,34 +47,7 @@ final createUsers = Create(
   */
 ```
 
-DQL
-
-```dart
-
-final createUsers = Create(
-    tableName: "users",
-    columns: [
-      ColumnInteger(
-        name: "id",
-        isPrimaryKey: true,
-        isAutoIncrement: true,
-      ),
-      ColumnText(
-        name: "name",
-        isNotNull: true,
-      ),
-    ],
-  );
-  print(FridaQueryBuilder(createUsers).build());
-
-  /* Output:
-  CREATE TABLE users(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
-  );
-  */
-```
-
+ 
 DML
 
 ```dart
@@ -106,7 +79,8 @@ final selectUsers = Select(
 print(FridaQueryBuilder(selectUsers).build());
 
   /* Output:
-  INSERT INTO users(name) VALUES("Felipe");
+  SELECT id, name
+  FROM users;
   */
 ```
 
@@ -142,7 +116,7 @@ print(FridaQueryBuilder(selectUsers).build());
 
 | Functionality                                   | Supported |
 | ----------------------------------------------- | --------- |
-| SELECT (specific columns / \*)                    | ✅        |
+| SELECT (specific columns / \*)                  | ✅        |
 | DISTINCT                                        | ✅        |
 | WHERE conditions                                | ✅        |
 | ORDER BY                                        | ✅        |
@@ -202,4 +176,3 @@ print(FridaQueryBuilder(selectUsers).build());
 <summary>Builders classes</summary>
 <img src="https://raw.githubusercontent.com/fegarza/frida_query_builder/main/out/uml/buildersClasses/builder_classes.png"/>
 </details>
-

@@ -18,7 +18,8 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
       alias = "AS ${select.alias}";
     }
 
-    sb.writeln("SELECT ${_buildProjections()}");
+    sb.writeln(
+        "SELECT ${select.distinct ? "DISTINCT " : ""}${_buildProjections()}");
     sb.writeln("FROM ${select.source} $alias");
     if (select.joins.isNotEmpty) {
       for (final join in select.joins) {
@@ -32,17 +33,25 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
         criteria: select.criteria,
       )).build()}");
     }
+
     if (select.groupBy.isNotEmpty) {
       sb.writeln(_buildGroupBy());
+      if (select.having.isNotEmpty) {
+        sb.writeln(" HAVING${CriteriaQueryBuilder(CriteriaStatement(
+          select.source,
+          criteria: select.having,
+        )).build()}");
+      }
     }
 
     if (select.orderBy.isNotEmpty) {
       sb.writeln(_buildOrderBy());
     }
-    if (select.offset != null) {
-      sb.writeln(_buildOffset());
+    if (select.limit != null) {
+      sb.write(_buildOffset());
     }
 
+    sb.write(";");
     return sb.toString();
   }
 
@@ -50,13 +59,13 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
     if (select.columns.isEmpty) {
       return "*";
     }
-    return select.columns.map((e) => FieldQueryBuilder(e).build()).join(" , ");
+    return select.columns.map((e) => FieldQueryBuilder(e).build()).join(", ");
   }
 
   String _buildGroupBy() {
     final sb = StringBuffer();
     if (select.groupBy.isNotEmpty) {
-      sb.write(" GROUP BY " + select.groupBy.join(" , "));
+      sb.write(" GROUP BY " + select.groupBy.join(", "));
     }
 
     return sb.toString();
@@ -65,7 +74,7 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
   String _buildOrderBy() {
     final sb = StringBuffer();
     if (select.orderBy.isNotEmpty) {
-      sb.write(" ORDER BY " + select.orderBy.join(" , "));
+      sb.write(" ORDER BY " + select.orderBy.join(", "));
     }
 
     return sb.toString();

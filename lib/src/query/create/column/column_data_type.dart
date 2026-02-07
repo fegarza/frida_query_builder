@@ -2,6 +2,7 @@ enum ColumnDataType {
   integer,
   text,
   real,
+  blob
 }
 
 extension ColumnDataTypeExtension on ColumnDataType {
@@ -13,6 +14,8 @@ extension ColumnDataTypeExtension on ColumnDataType {
         return 'TEXT';
       case ColumnDataType.real:
         return "REAL";
+      case ColumnDataType.blob:
+        return "BLOB";
     }
   }
 }

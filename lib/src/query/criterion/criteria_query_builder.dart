@@ -2,7 +2,7 @@ import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
 import 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_compare.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_compare_query_builder.dart';
-import 'package:frida_query_builder/src/query/criterion/criterion_logic.dart';
+import 'package:frida_query_builder/src/query/criterion/criterion_login.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_logic_query_builder.dart';
 import 'package:frida_query_builder/src/query/delete/delete.dart';
 import 'package:frida_query_builder/src/query/delete/delete_query_builder.dart';
@@ -32,6 +32,7 @@ class CriteriaQueryBuilder extends FridaQueryBuilder {
   String _buildCriteriaString() {
     var sb = StringBuffer();
     bool isFirstIteration = true;
+
     for (final criteria in criteriaStatement.criteria) {
       if (criteria is CriterionLogic) {
         sb.write(
@@ -40,9 +41,10 @@ class CriteriaQueryBuilder extends FridaQueryBuilder {
               .build(),
         );
       }
+
       if (criteria is CriterionCompare) {
         if (!isFirstIteration) {
-          sb.write(" AND ");
+          sb.write("AND");
         }
         sb.write(
           CriterionCompareQueryBuilder(
@@ -52,6 +54,7 @@ class CriteriaQueryBuilder extends FridaQueryBuilder {
           ).build(),
         );
       }
+      
       isFirstIteration = false;
     }
 

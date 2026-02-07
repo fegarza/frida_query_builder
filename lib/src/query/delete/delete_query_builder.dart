@@ -14,7 +14,7 @@ class DeleteQueryBuilder extends CriteriaQueryBuilder {
     sb.writeln("DELETE FROM ${delete.source} ");
 
     if (delete.criteria.isNotEmpty) {
-      sb.writeln("WHERE ${CriteriaQueryBuilder(CriteriaStatement(
+      sb.writeln("WHERE${CriteriaQueryBuilder(CriteriaStatement(
         delete.source,
         criteria: delete.criteria,
       )).build()}");

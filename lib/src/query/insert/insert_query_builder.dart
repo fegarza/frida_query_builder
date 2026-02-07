@@ -10,15 +10,15 @@ class InsertQueryBuilder extends FridaQueryBuilder {
   @override
   String build() {
     StringBuffer sb = StringBuffer();
-    sb.write("INSERT INTO ${insert.source} (");
-    sb.write(insert.values.keys.toList().join(" , ") + ")");
-    sb.write(" VALUES (");
+    sb.write("INSERT INTO ${insert.source}(");
+    sb.write(insert.values.keys.toList().join(", ") + ")");
+    sb.write(" VALUES(");
     sb.write(insert.values.values
             .toList()
             .map(
               (e) => FieldQueryBuilder(e).build(),
             )
-            .join(" , ") +
+            .join(", ") +
         ");");
     return sb.toString();
   }

@@ -1,6 +1,6 @@
 import 'package:frida_query_builder/src/query/criterion/criterion.dart';
 
-class CriterionLogic extends Criterion {
+abstract class CriterionLogic extends Criterion {
   List<Criterion> criteria;
 
   CriterionLogic(

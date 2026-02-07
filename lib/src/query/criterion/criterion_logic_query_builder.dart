@@ -1,6 +1,6 @@
 import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
 import 'package:frida_query_builder/src/query/criterion/criteria_query_builder.dart';
-import 'package:frida_query_builder/src/query/criterion/criterion_logic.dart';
+import 'package:frida_query_builder/src/query/criterion/criterion_login.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_query_builder.dart';
 
 class CriterionLogicQueryBuilder extends CriterionQueryBuilder {
@@ -20,7 +20,7 @@ class CriterionLogicQueryBuilder extends CriterionQueryBuilder {
       return "";
     }
 
-    sb.write(" ${criterionLogic.criterionOperator} ( ");
+    sb.write("${criterionLogic.criterionOperator}(");
 
     sb.write(
       CriteriaQueryBuilder(
@@ -28,7 +28,7 @@ class CriterionLogicQueryBuilder extends CriterionQueryBuilder {
       ).build(),
     );
 
-    sb.write(" ) ");
+    sb.write(") ");
 
     return sb.toString();
   }

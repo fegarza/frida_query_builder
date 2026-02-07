@@ -13,6 +13,8 @@ class Select extends CriteriaStatement {
 
   int? limit;
   int? offset;
+  bool distinct;
+  List<Criterion> having;
 
   Select({
     required String from,
@@ -23,9 +25,11 @@ class Select extends CriteriaStatement {
     this.alias,
     this.limit,
     this.offset,
-    List<Criterion> criteria = const [],
+    this.having = const [],
+    this.distinct = false,
+    List<Criterion> where = const [],
   }) : super(
           from,
-          criteria: criteria,
+          criteria: where,
         );
 }

@@ -1,5 +1,4 @@
 import "package:frida_query_builder/src/query/create/column/column.dart";
-import "package:frida_query_builder/src/query/create/foreign_key.dart";
 import 'package:frida_query_builder/src/query/create/column/column_data_type.dart';
 
 class ColumnBlob extends Column {

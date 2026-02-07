@@ -1,7 +1,6 @@
 import 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
 import 'package:frida_query_builder/src/query/create/column/column_query_builder.dart';
 import 'package:frida_query_builder/src/query/create/create.dart';
-import 'package:frida_query_builder/src/query/create/foreign_key.dart';
 import 'package:frida_query_builder/src/query/create/foreign_key_query_builder.dart';
 import 'package:frida_query_builder/src/query/create/primary_key_query_builder.dart';
 
@@ -42,13 +41,4 @@ class CreateQueryBuilder extends FridaQueryBuilder {
     return sb.toString();
   }
 
-  String _buildColumnsDefinitions() {
-    var sb = StringBuffer();
-
-    sb.write(create.columns
-        .map((e) => " " + ColumnQueryBuilder(e).build())
-        .join(",\n"));
-
-    return sb.toString();
-  }
 }

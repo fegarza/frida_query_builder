@@ -1,137 +1,123 @@
 import 'package:frida_query_builder/frida_query_builder.dart';
 import 'package:frida_query_builder/src/query/common/statement.dart';
+import 'package:frida_query_builder/src/query/create/column/column_blob.dart';
+import 'package:frida_query_builder/src/query/create/column/column_integer.dart';
+import 'package:frida_query_builder/src/query/create/column/column_real.dart';
+import 'package:frida_query_builder/src/query/create/column/column_text.dart';
+import 'package:frida_query_builder/src/query/create/foreign_key.dart';
+import 'package:frida_query_builder/src/query/criterion/criterion_login.dart';
+import 'package:frida_query_builder/src/query/criterion/operators/greater_equal_than.dart';
+import 'package:frida_query_builder/src/query/criterion/operators/greater_than.dart';
+import 'package:frida_query_builder/src/query/criterion/operators/grouping.dart';
+import 'package:frida_query_builder/src/query/functions/length.dart';
 
 void main() {
-  Statement statement;
-
-  statement = Create(
-    tableName: "students",
+  // Create tables
+  final contactsTable = Create(
+    tableName: "contacts",
     columns: [
-      Column(
-        name: "student_id",
-        type: ColumnDataType.integer,
-        isAutoIncrement: true,
+      ColumnInteger(
+        name: "id",
         isPrimaryKey: true,
+        isAutoIncrement: true,
       ),
-      Column(
+      ColumnText(
         name: "name",
-        type: ColumnDataType.text,
         isNotNull: true,
-        defaultValue: "2",
+        checkConstraints: [
+          GreaterThan(Length("name"), 1),
+        ],
       ),
-      Column(
-        name: "email",
-        type: ColumnDataType.text,
+      ColumnText(name: "email"),
+    ],
+  );
+
+  final transactionsTable = Create(
+    tableName: "transactions",
+    columns: [
+      ColumnInteger(
+        name: "id",
+        isPrimaryKey: true,
+        isAutoIncrement: true,
+      ),
+      ColumnText(
+        name: "title",
         isNotNull: true,
+      ),
+      ColumnReal(
+        name: "amount",
+        isNotNull: true,
+      ),
+      ColumnInteger(
+        name: "contact_id",
+        foreignKey: ForeignKey(
+          referencedTable: "contacts",
+          referencedColumn: "id",
+        ),
       ),
     ],
   );
 
-  print(FridaQueryBuilder(statement).build());
-  /* OUTPUT:
-  CREATE TABLE students (
-  student_id INTEGER AUTO INCREMENT  ,
-  name TEXT NOT NULL DEFAULT("2")  ,
-  email TEXT NOT NULL ,
-  PRIMARY KEY ( student_id)
-  );
-  */
+  print(FridaQueryBuilder(contactsTable).build() + "\n");
+  print(FridaQueryBuilder(transactionsTable).build() + "\n");
 
-  statement = Select(from: "students");
-
-  print(FridaQueryBuilder(statement).build());
-  /* OUTPUT:
-  SELECT *
-  FROM students 
-  */
-
-  statement = Select(
-    from: "students",
-    alias: "s",
-    columns: [
-      "name".field,
-      "age".field,
-      "gender".field,
-      "Simple Text",
-      22,
-    ],
+// Insert data
+  final insertContact = Insert(
+    into: "contacts",
+    values: {
+      "name": "Felipe",
+      "email": "f@f.com",
+    },
   );
 
-  print(FridaQueryBuilder(statement).build());
-  /* OUTPUT:
-  SELECT name , age , gender , "Simple Text" , 22
-  FROM students AS s
-  */
+  final insertTransaction = Insert(
+    into: "transactions",
+    values: {
+      "title": "Payment",
+      "amount": 100.0,
+      "contact_id": 1,
+    },
+  );
 
-  statement = Select(
-    from: "students",
+  print(FridaQueryBuilder(insertContact).build() + "\n");
+  print(FridaQueryBuilder(insertTransaction).build() + "\n");
+
+// Select with join, grouping and filters
+  final query = Select(
+    from: "transactions",
     columns: [
-      "s.name".field,
-      "s.student_id",
-      "s.email",
-      '"Text" AS simpleText',
-      2.field,
-      2.22.field,
-      "Text x2",
+      "transactions.title".field,
+      "transactions.amount".field,
+      "contacts.name".field,
     ],
     joins: [
       Join(
-        "student_classes",
-        alias: "c",
+        "contacts",
+        type: JoinType.inner,
         criteria: [
-          Equals("c.student_id".field, "s.student_id".field),
-          NotEquals("c.description".field, "math"),
+          Equals(
+            "transactions.contact_id".field,
+            "contacts.id".field,
+          ),
         ],
-      )
+      ),
     ],
-    alias: "s",
-    limit: 2,
-    offset: 3,
-    orderBy: ["c.description"],
-    criteria: [
-      In("s.name".field, ["Felipe", "Juan"]),
-      Or(
-        [
-          Equals("b", "b"),
-          And([Equals("1", "1"), Equals("1", "1")])
-        ],
-      )
+    where: [
+      GreaterThan("transactions.amount".field, 50),
     ],
+    groupBy: ["contacts.name"],
+    limit: 10,
   );
 
-  print(FridaQueryBuilder(statement).build());
-  /* OUTPUT:
-  SELECT s.name , "s.student_id" , "s.email" , ""Text" AS simpleText" , 2 , 2.22 , "Text x2"
-  FROM students AS s
-  INNER JOIN student_classes AS c
-  ON  c.student_id = s.student_id  AND  c.description <> "math" 
-  WHERE  s.name IN ( "Felipe" , "Juan" )  OR (  "b" = "b"  AND (  "1" = "1"  AND  "1" = "1"  )  ) 
-  ORDER BY c.description
-  LIMIT 2 OFFSET 3
-  */
+  print(FridaQueryBuilder(query).build() + "\n");
 
-  statement = Update(
-    table: "students",
-    values: {"name": "Juan"},
+// Delete
+  final deleteContact = Delete(
+    table: "contacts",
     criteria: [
       Equals("name".field, "Felipe"),
     ],
   );
-  print(FridaQueryBuilder(statement).build());
-  /* OUTPUT:
-  UPDATE students SET name = "Juan" 
-  WHERE  name = "Felipe" 
-  */
 
-  statement = Delete(
-    table: "students",
-    criteria: [
-      Equals("name".field, "Felipe"),
-    ],
-  );
-  print(FridaQueryBuilder(statement).build());
-  /* OUTPUT:
-  DELETE students 
-  WHERE  name = "Felipe"
-  */
+  print(FridaQueryBuilder(deleteContact).build() + "\n");
 }

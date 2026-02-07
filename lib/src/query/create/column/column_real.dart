@@ -7,7 +7,7 @@ class ColumnReal extends Column {
       {required String name,
       bool isPrimaryKey = false,
       bool isNotNull = false,
-      String? defaultValue,
+      double? defaultValue,
       ForeignKey? foreignKey})
       : super(
             name: name,
@@ -15,6 +15,6 @@ class ColumnReal extends Column {
             isPrimaryKey: isPrimaryKey,
             isNotNull: isNotNull,
             isAutoIncrement: false,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue?.toStringAsFixed(2),
             foreignKey: foreignKey);
 }

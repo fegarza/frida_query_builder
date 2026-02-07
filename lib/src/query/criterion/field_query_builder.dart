@@ -26,8 +26,12 @@ class FieldQueryBuilder extends QueryBuilder {
     }
     if (field is Field) {
       Field f = (field as Field);
+      String result = f.field;
+      if (f.alias != null) {
+        result += " AS ${f.alias}";
+      }
 
-      return f.field;
+      return result;
     }
 
     return field.toString();

@@ -1,4 +1,5 @@
 import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
+import 'package:frida_query_builder/src/query/common/statement_visitor.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion.dart';
 
 class Update extends CriteriaStatement {
@@ -12,4 +13,9 @@ class Update extends CriteriaStatement {
           table,
           criteria: criteria,
         );
+
+  @override
+  T accept<T>(StatementVisitor<T> visitor) {
+    return visitor.visitUpdate(this);
+  }
 }

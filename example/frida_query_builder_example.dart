@@ -1,15 +1,4 @@
 import 'package:frida_query_builder/frida_query_builder.dart';
-import 'package:frida_query_builder/src/query/common/statement.dart';
-import 'package:frida_query_builder/src/query/create/column/column_blob.dart';
-import 'package:frida_query_builder/src/query/create/column/column_integer.dart';
-import 'package:frida_query_builder/src/query/create/column/column_real.dart';
-import 'package:frida_query_builder/src/query/create/column/column_text.dart';
-import 'package:frida_query_builder/src/query/create/foreign_key.dart';
-import 'package:frida_query_builder/src/query/criterion/criterion_login.dart';
-import 'package:frida_query_builder/src/query/criterion/operators/greater_equal_than.dart';
-import 'package:frida_query_builder/src/query/criterion/operators/greater_than.dart';
-import 'package:frida_query_builder/src/query/criterion/operators/grouping.dart';
-import 'package:frida_query_builder/src/query/functions/length.dart';
 
 void main() {
   // Create tables
@@ -58,8 +47,8 @@ void main() {
     ],
   );
 
-  print(FridaQueryBuilder(contactsTable).build() + "\n");
-  print(FridaQueryBuilder(transactionsTable).build() + "\n");
+  print(contactsTable.build() + "\n");
+  print(transactionsTable.build() + "\n");
 
 // Insert data
   final insertContact = Insert(
@@ -86,7 +75,7 @@ void main() {
   final query = Select(
     from: "transactions",
     columns: [
-      "transactions.title".field,
+      "transactions.title".field.as("title"),
       "transactions.amount".field,
       "contacts.name".field,
     ],

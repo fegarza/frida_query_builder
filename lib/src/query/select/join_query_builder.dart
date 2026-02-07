@@ -13,13 +13,14 @@ class JoinQueryBuilder extends CriteriaQueryBuilder {
 
     String alias = "";
     if (join.alias != null) {
-      alias = "AS ${join.alias}";
+      alias = " AS ${join.alias}";
     }
 
-    sb.writeln("${join.type.getString()} ${join.source} $alias");
+    sb.write("${join.type.getString()} ${join.source}$alias");
 
     if (criteriaStatement.criteria.isNotEmpty) {
-      sb.writeln(
+      sb.write("\n");
+      sb.write(
         " ON${CriteriaQueryBuilder(
           CriteriaStatement(
             join.source,

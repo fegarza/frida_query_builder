@@ -15,6 +15,9 @@ class Field {
     return this;
   }
 
+  @override
+  String toString() => field;
+
   // Arithmetic operators
   Plus plus(Field other) => Plus(left: this, right: other);
   Minus minus(Field other) => Minus(left: this, right: other);

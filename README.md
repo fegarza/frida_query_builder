@@ -202,6 +202,8 @@ print(delete.build());
 | LIMIT + OFFSET                                  |    ✅     |
 | INNER JOIN                                      |    ✅     |
 | LEFT JOIN                                       |    ✅     |
+| JOIN ON UPDATE                                  |    ❌     |
+| JOIN ON DELETE                                  |    ❌     |
 | Subqueries (WHERE, FROM, SELECT)                |    ❌     |
 | Aggregate functions (COUNT, SUM, AVG, MIN, MAX) |    ✅     |
 

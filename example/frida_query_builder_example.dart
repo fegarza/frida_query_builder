@@ -14,7 +14,7 @@ void main() {
         name: "name",
         isNotNull: true,
         checkConstraints: [
-          GreaterThan(Length("name"), 1),
+          GreaterThan(Length("name".field), 1),
         ],
       ),
       ColumnText(name: "email"),

@@ -1,3 +1,7 @@
+## 1.2.1
+
+- Fix issue with functions not working when field is a string.
+
 ## 1.2.0
 
 - Introduce arithmetic operators (+, -, *, /, %) for field expressions in queries.

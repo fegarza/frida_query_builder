@@ -8,8 +8,13 @@ class Delete extends CriteriaStatement {
     List<Criterion> criteria = const [],
   }) : super(
           table,
-          criteria: criteria,
+          criteria: [...criteria],
         );
+
+  Delete where(List<Criterion> criteria) {
+    this.criteria = [...this.criteria, ...criteria];
+    return this;
+  }
 
   @override
   T accept<T>(StatementVisitor<T> visitor) {

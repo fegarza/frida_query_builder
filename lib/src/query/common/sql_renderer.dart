@@ -12,7 +12,6 @@ import 'package:frida_query_builder/src/query/create/foreign_key_query_builder.d
 import 'package:frida_query_builder/src/query/create/primary_key_query_builder.dart';
 import 'package:frida_query_builder/src/query/criterion/field_query_builder.dart';
 import 'package:frida_query_builder/src/query/select/join_query_builder.dart';
-import 'package:frida_query_builder/src/query/criterion/criterion_logic_query_builder.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_compare_query_builder.dart';
 
 import 'package:frida_query_builder/src/query/criterion/criterion_compare.dart';
@@ -184,25 +183,24 @@ class SqlRenderer implements StatementVisitor<String> {
 
   @override
   String visitCriteria(CriteriaStatement statement) {
-    var sb = StringBuffer();
-    bool isFirstIteration = true;
-
-    for (final criteria in statement.criteria) {
-      if (!isFirstIteration && criteria is CriterionCompare) {
-        sb.write(" AND ");
-      }
-      sb.write(criteria.accept(this));
-      isFirstIteration = false;
-    }
-
-    return sb.toString();
+    return statement.criteria.map((c) => c.accept(this)).join(" AND ");
   }
 
   @override
   String visitCriterionLogic(CriterionLogic statement) {
-    return CriterionLogicQueryBuilder(statement,
-            quoted: statement.firstFieldQuoted)
-        .build();
+    if (statement.criteria.isEmpty) {
+      return "";
+    }
+
+    if (statement.criterionOperator == "NOT") {
+      return "NOT (${statement.criteria.first.accept(this)})";
+    }
+
+    return "(" +
+        statement.criteria
+            .map((c) => c.accept(this))
+            .join(" ${statement.criterionOperator} ") +
+        ")";
   }
 
   @override

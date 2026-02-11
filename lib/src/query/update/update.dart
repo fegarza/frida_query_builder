@@ -11,8 +11,23 @@ class Update extends CriteriaStatement {
     required this.values,
   }) : super(
           table,
-          criteria: criteria,
+          criteria: [...criteria],
         );
+
+  Update where(List<Criterion> criteria) {
+    this.criteria = [...this.criteria, ...criteria];
+    return this;
+  }
+
+  Update setValues(Map<String, Object?> values) {
+    this.values = values;
+    return this;
+  }
+
+  Update addValue(String column, Object? value) {
+    this.values[column] = value;
+    return this;
+  }
 
   @override
   T accept<T>(StatementVisitor<T> visitor) {

@@ -7,8 +7,18 @@ class Create extends Statement {
 
   Create({
     required String tableName,
-    required this.columns,
+    this.columns = const [],
   }) : super(tableName);
+
+  Create addColumn(Column column) {
+    this.columns = [...this.columns, column];
+    return this;
+  }
+
+  Create addColumns(List<Column> columns) {
+    this.columns = [...this.columns, ...columns];
+    return this;
+  }
 
   @override
   T accept<T>(StatementVisitor<T> visitor) {

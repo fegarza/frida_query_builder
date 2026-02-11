@@ -31,8 +31,58 @@ class Select extends CriteriaStatement {
     List<Criterion> where = const [],
   }) : super(
           from,
-          criteria: where,
+          criteria: [...where],
         );
+
+  Select addColumns(List<Object> columns) {
+    this.columns = [...this.columns, ...columns];
+    return this;
+  }
+
+  Select setColumns(List<Object> columns) {
+    this.columns = columns;
+    return this;
+  }
+
+  Select where(List<Criterion> criteria) {
+    this.criteria = [...this.criteria, ...criteria];
+    return this;
+  }
+
+  Select groupByColumns(List<String> columns) {
+    this.groupBy = [...this.groupBy, ...columns];
+    return this;
+  }
+
+  Select orderByColumns(List<String> columns) {
+    this.orderBy = [...this.orderBy, ...columns];
+    return this;
+  }
+
+  Select setLimit(int limit) {
+    this.limit = limit;
+    return this;
+  }
+
+  Select setOffset(int offset) {
+    this.offset = offset;
+    return this;
+  }
+
+  Select setDistinct(bool distinct) {
+    this.distinct = distinct;
+    return this;
+  }
+
+  Select addJoin(Join join) {
+    this.joins = [...this.joins, join];
+    return this;
+  }
+
+  Select havingCriteria(List<Criterion> criteria) {
+    this.having = [...this.having, ...criteria];
+    return this;
+  }
 
   @override
   T accept<T>(StatementVisitor<T> visitor) {

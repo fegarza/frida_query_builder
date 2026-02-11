@@ -2,7 +2,7 @@ import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
 import 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_compare.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_compare_query_builder.dart';
-import 'package:frida_query_builder/src/query/criterion/criterion_login.dart';
+import 'package:frida_query_builder/src/query/criterion/criterion_logic.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_logic_query_builder.dart';
 import 'package:frida_query_builder/src/query/delete/delete.dart';
 import 'package:frida_query_builder/src/query/delete/delete_query_builder.dart';

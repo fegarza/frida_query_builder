@@ -16,9 +16,8 @@ import 'package:frida_query_builder/src/query/criterion/criterion_logic_query_bu
 import 'package:frida_query_builder/src/query/criterion/criterion_compare_query_builder.dart';
 
 import 'package:frida_query_builder/src/query/criterion/criterion_compare.dart';
-import 'package:frida_query_builder/src/query/criterion/criterion_login.dart';
+import 'package:frida_query_builder/src/query/criterion/criterion_logic.dart';
 
-import 'package:frida_query_builder/src/query/alter/alter.dart';
 import 'package:frida_query_builder/src/query/alter/add_column.dart';
 import 'package:frida_query_builder/src/query/alter/drop_column.dart';
 import 'package:frida_query_builder/src/query/alter/drop_table.dart';
@@ -27,39 +26,28 @@ import 'package:frida_query_builder/src/query/alter/rename_table.dart';
 
 class SqlRenderer implements StatementVisitor<String> {
   @override
-  String visitAlter(Alter statement) {
-    var sb = StringBuffer();
+  String visitRenameTable(RenameTable statement) {
+    return "ALTER TABLE ${statement.source} RENAME TO ${statement.newName};";
+  }
 
-    if (statement is RenameTable) {
-      sb.write(
-          "ALTER TABLE ${statement.source} RENAME TO ${statement.newName};");
-      return sb.toString();
-    }
+  @override
+  String visitAddColumn(AddColumn statement) {
+    return "ALTER TABLE ${statement.source} ADD COLUMN ${ColumnQueryBuilder(statement.column).build()};";
+  }
 
-    if (statement is AddColumn) {
-      sb.write(
-          "ALTER TABLE ${statement.source} ADD COLUMN ${ColumnQueryBuilder(statement.column).build()};");
-      return sb.toString();
-    }
+  @override
+  String visitRenameColumn(RenameColumn statement) {
+    return "ALTER TABLE ${statement.source} RENAME COLUMN ${statement.oldName} TO ${statement.newName};";
+  }
 
-    if (statement is RenameColumn) {
-      sb.write(
-          "ALTER TABLE ${statement.source} RENAME COLUMN ${statement.oldName} TO ${statement.newName};");
-      return sb.toString();
-    }
+  @override
+  String visitDropColumn(DropColumn statement) {
+    return "ALTER TABLE ${statement.source} DROP COLUMN ${statement.columnName};";
+  }
 
-    if (statement is DropColumn) {
-      sb.write(
-          "ALTER TABLE ${statement.source} DROP COLUMN ${statement.columnName};");
-      return sb.toString();
-    }
-
-    if (statement is DropTable) {
-      sb.write("DROP TABLE ${statement.source};");
-      return sb.toString();
-    }
-
-    return sb.toString();
+  @override
+  String visitDropTable(DropTable statement) {
+    return "DROP TABLE ${statement.source};";
   }
 
   @override
@@ -200,31 +188,30 @@ class SqlRenderer implements StatementVisitor<String> {
     bool isFirstIteration = true;
 
     for (final criteria in statement.criteria) {
-      if (criteria is CriterionLogic) {
-        sb.write(
-          CriterionLogicQueryBuilder(criteria,
-                  quoted: criteria.firstFieldQuoted)
-              .build(),
-        );
+      if (!isFirstIteration && criteria is CriterionCompare) {
+        sb.write(" AND ");
       }
-
-      if (criteria is CriterionCompare) {
-        if (!isFirstIteration) {
-          sb.write(" AND ");
-        }
-        sb.write(
-          CriterionCompareQueryBuilder(
-            criteria,
-            firstFieldQuoted: criteria.firstFieldQuoted,
-            secondFieldQuoted: criteria.secondFieldQuoted,
-          ).build(),
-        );
-      }
-
+      sb.write(criteria.accept(this));
       isFirstIteration = false;
     }
 
     return sb.toString();
+  }
+
+  @override
+  String visitCriterionLogic(CriterionLogic statement) {
+    return CriterionLogicQueryBuilder(statement,
+            quoted: statement.firstFieldQuoted)
+        .build();
+  }
+
+  @override
+  String visitCriterionCompare(CriterionCompare statement) {
+    return CriterionCompareQueryBuilder(
+      statement,
+      firstFieldQuoted: statement.firstFieldQuoted,
+      secondFieldQuoted: statement.secondFieldQuoted,
+    ).build();
   }
 
   // Helper methods for Select

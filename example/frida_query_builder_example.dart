@@ -37,6 +37,9 @@ void main() {
         name: "amount",
         isNotNull: true,
       ),
+      ColumnText(
+        name: "description",
+      ),
       ColumnInteger(
         name: "contact_id",
         foreignKey: ForeignKey(
@@ -61,7 +64,8 @@ void main() {
     into: "contacts",
     values: {
       "name": "Felipe",
-      "email": "f@f.com",
+      "email": "felipe@example.com",
+      "phone": "123456789",
     },
   );
 
@@ -98,7 +102,7 @@ void main() {
       ),
     ],
     where: [
-      Not([LessThan(Length("transactions.title"), 15)]),
+      Not([LessThan(Length("title".field), 15)]),
       And([
         Between("transactions.amount".field.plus(10.field), 40, 100),
         Between("transactions.amount".field, 40, 100),

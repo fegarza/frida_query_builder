@@ -5,7 +5,5 @@ abstract class Alter extends Statement {
   Alter(String tableName) : super(tableName);
 
   @override
-  T accept<T>(StatementVisitor<T> visitor) {
-    return visitor.visitAlter(this);
-  }
+  T accept<T>(StatementVisitor<T> visitor);
 }

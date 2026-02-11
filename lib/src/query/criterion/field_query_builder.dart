@@ -19,11 +19,11 @@ class FieldQueryBuilder extends QueryBuilder {
       if (!quoted) {
         return "$field";
       }
-      if ((field as String).contains('"')) {
-        field = (field as String).replaceAll('"', '""');
+      if ((field as String).contains("'")) {
+        field = (field as String).replaceAll("'", "''");
       }
 
-      return '"$field"';
+      return "'$field'";
     }
     // Check for Operator BEFORE Field, since Operator extends Field
     if (field is Operator) {

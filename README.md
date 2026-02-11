@@ -101,7 +101,7 @@ final insertUser = Insert(
 
 print(insertUser.build());
 /* Output:
-INSERT INTO users(name, email) VALUES("Felipe", "felipe@example.com");
+INSERT INTO users(name, email) VALUES('Felipe', 'felipe@example.com');
 */
 ```
 

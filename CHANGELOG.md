@@ -1,3 +1,7 @@
+## 1.2.2
+
+- Fix to use single quotes for string literals in SQL queries (SQL standard compliance).
+
 ## 1.2.1
 
 - Fix issue with functions not working when field is a string.

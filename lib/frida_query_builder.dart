@@ -1,3 +1,7 @@
+/// A fluent SQL query builder for Dart.
+///
+/// This library provides a set of classes and extensions to build SQL statements
+/// (SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER) using a fluent and intuitive API.
 library frida_query_builder;
 
 // Common

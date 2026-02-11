@@ -2,6 +2,7 @@ import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
 import 'package:frida_query_builder/src/query/common/statement_visitor.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion.dart';
 
+/// Represents an SQL DELETE statement.
 class Delete extends CriteriaStatement {
   Delete({
     required String table,
@@ -11,6 +12,7 @@ class Delete extends CriteriaStatement {
           criteria: [...criteria],
         );
 
+  /// Appends [criteria] to the WHERE clause using an AND connector.
   Delete where(List<Criterion> criteria) {
     this.criteria = [...this.criteria, ...criteria];
     return this;

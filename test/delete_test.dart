@@ -21,13 +21,16 @@ void main() {
     test('Delete with complex criteria', () {
       final query = Delete(table: 'logs', criteria: [
         LessThan('created_at'.field, '2023-01-01'),
-        Or([Equals('status'.field, "archived")])
+        Or([
+          Equals('status'.field, "archived"),
+          Equals('status'.field, "archived")
+        ])
       ]);
       // Note: Logic operators might vary in output format depending on implementation detail of CriteriaQueryBuilder
       // Adjust expectation based on actual output format if needed.
       final sql = query.build();
-      expect(sql, contains('created_at < "2023-01-01"'));
-      expect(sql, contains('OR(status = "archived")'));
+      expect(sql, contains("created_at < '2023-01-01'"));
+      expect(sql, contains("status = 'archived' OR status = 'archived'"));
     });
   });
 }

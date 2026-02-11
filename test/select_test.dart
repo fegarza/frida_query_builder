@@ -54,7 +54,7 @@ void main() {
         from: 'orders',
         columns: ['user_id'.field, Count('id').as('order_count')],
         groupBy: ['user_id'],
-        having: [GreaterThan(Count('id'), 5)],
+        having: [GreaterThan(Count('id'.f), 5)],
       );
       final sql = query.build();
       expect(sql, contains('GROUP BY user_id'));
@@ -65,7 +65,7 @@ void main() {
     test('Select with Sum and alias', () {
       final query = Select(
         from: 'orders',
-        columns: [Sum('amount').as('total_amount')],
+        columns: [Sum('amount'.f).as('total_amount')],
       );
       final sql = query.build();
       expect(sql, contains('SUM(amount) AS total_amount'));

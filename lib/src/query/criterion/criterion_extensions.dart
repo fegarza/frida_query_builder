@@ -3,12 +3,13 @@ import 'package:frida_query_builder/frida_query_builder.dart';
 /// Extensions for [Field] to create [Criterion] objects fluently.
 extension FieldExtensions on Field {
   /// Creates an [Equals] criterion: `this = value`.
-  Equals equals(Object? value, {bool valueQuoted = true}) =>
-      Equals(this, value, secondFieldQuoted: valueQuoted);
+  Equals equals(Object? value, {bool? valueQuoted}) =>
+      Equals(this, value, secondFieldQuoted: valueQuoted ?? !(value is Field));
 
   /// Creates a [NotEquals] criterion: `this <> value`.
-  NotEquals notEquals(Object? value, {bool valueQuoted = true}) =>
-      NotEquals(this, value, secondFieldQuoted: valueQuoted);
+  NotEquals notEquals(Object? value, {bool? valueQuoted}) =>
+      NotEquals(this, value,
+          secondFieldQuoted: valueQuoted ?? !(value is Field));
 
   /// Creates a [GreaterThan] criterion: `this > value`.
   GreaterThan greaterThan(Object? value) => GreaterThan(this, value);

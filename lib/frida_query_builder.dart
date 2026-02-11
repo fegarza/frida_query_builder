@@ -8,6 +8,7 @@ library frida_query_builder;
 export 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
 export 'package:frida_query_builder/src/query/common/statement.dart';
 export 'package:frida_query_builder/src/query/common/all_extensions.dart';
+export 'package:frida_query_builder/src/query/common/subquery.dart';
 export 'package:frida_query_builder/src/query/common/frida_query_builder_extension.dart';
 export 'package:frida_query_builder/src/query/alter/alter.dart';
 export 'package:frida_query_builder/src/query/alter/rename_table.dart';

@@ -107,6 +107,18 @@ class Select extends CriteriaStatement {
     return this;
   }
 
+  /// Adds an INNER JOIN to the query.
+  Select innerJoin(String table, {required List<Criterion> on, String? alias}) {
+    return addJoin(
+        Join(table, type: JoinType.inner, criteria: on, alias: alias));
+  }
+
+  /// Adds a LEFT JOIN to the query.
+  Select leftJoin(String table, {required List<Criterion> on, String? alias}) {
+    return addJoin(
+        Join(table, type: JoinType.left, criteria: on, alias: alias));
+  }
+
   /// Appends [criteria] to the HAVING clause.
   Select havingCriteria(List<Criterion> criteria) {
     this.having = [...this.having, ...criteria];

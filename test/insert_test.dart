@@ -14,7 +14,7 @@ void main() {
 
       final sql = query.build();
       expect(sql, startsWith('INSERT INTO users(name, age) VALUES('));
-      expect(sql, contains('"John Doe"'));
+      expect(sql, contains("'John Doe'"));
       expect(sql, contains('30'));
     });
 

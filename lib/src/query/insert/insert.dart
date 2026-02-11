@@ -6,7 +6,9 @@ class Insert extends Statement {
   /// Map of column names to their values.
   Map<String, Object?> values;
 
-  Insert({required dynamic into, required this.values}) : super(into);
+  Insert({required dynamic into, Map<String, Object?>? values})
+      : values = values != null ? Map.from(values) : {},
+        super(into);
 
   /// Replaces the existing values map with [values].
   Insert setValues(Map<String, Object?> values) {

@@ -205,11 +205,7 @@ class SqlRenderer implements StatementVisitor<String> {
 
   @override
   String visitCriterionCompare(CriterionCompare statement) {
-    return CriterionCompareQueryBuilder(
-      statement,
-      firstFieldQuoted: statement.firstFieldQuoted,
-      secondFieldQuoted: statement.secondFieldQuoted,
-    ).build();
+    return CriterionCompareQueryBuilder(statement).build();
   }
 
   // Helper methods for Select

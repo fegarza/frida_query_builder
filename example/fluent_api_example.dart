@@ -55,12 +55,12 @@ void main() {
   print(alterTable.build() + "\n");
 
   // 3. Insert data
-  final insertContact = Insert(into: "contacts", values: {})
+  final insertContact = Insert(into: "contacts") // Removed mandatory values: {}
       .addValue("name", "Felipe")
       .addValue("email", "felipe@example.com")
       .addValue("phone", "123456789");
 
-  final insertTransaction = Insert(into: "transactions", values: {})
+  final insertTransaction = Insert(into: "transactions")
       .addValue("title", "Payment")
       .addValue("amount", 100.0)
       .addValue("contact_id", 1);
@@ -69,30 +69,22 @@ void main() {
   print(insertTransaction.build() + "\n");
 
   // 4. Select with join, grouping and filters
-  final query = Select(from: "transactions")
-      .setColumns([
-        "transactions.title".f.as("title"),
-        "transactions.amount".f,
-        "contacts.name".f,
-      ])
-      .addJoin(
-        Join(
-          "contacts",
-          type: JoinType.inner,
-          criteria: [
-            "transactions.contact_id"
-                .f
-                .equals("contacts.id".f, valueQuoted: false)
-          ],
-        ),
-      )
-      .where([
-        Length("title".f).lessThan(15).not(),
-        ("transactions.amount".f.plus(10.f)).between(40, 100) &
-            "transactions.amount".f.between(40, 100),
-      ])
-      .groupByColumns(["contacts.name"])
-      .setLimit(10);
+  final query = Select(from: "transactions").setColumns([
+    "transactions.title".f.as("title"),
+    "transactions.amount".f,
+    "contacts.name".f,
+  ]).innerJoin(
+    "contacts",
+    on: [
+      "transactions.contact_id"
+          .f
+          .equals("contacts.id".f) // No more valueQuoted: false needed!
+    ],
+  ).where([
+    Length("title".f).lessThan(15).not(),
+    ("transactions.amount".f.plus(10.f)).between(40, 100) &
+        "transactions.amount".f.between(40, 100),
+  ]).groupByColumns(["contacts.name"]).setLimit(10);
 
   print(query.build() + "\n");
 
@@ -132,4 +124,15 @@ void main() {
       Delete(table: "contacts").where(["name".f.equals("Felipe")]);
 
   print(deleteContact.build() + "\n");
+
+  // 7. Subquery Example
+  print("=== Subquery Example ===\n");
+  final subquery = Select(from: "transactions")
+      .setColumns(["contact_id".f]).where(["amount".f.greaterThan(50)]);
+
+  final mainQuery = Select(from: "contacts").where([
+    "id".f.isIn([Subquery(subquery)])
+  ]);
+
+  print(mainQuery.build() + "\n");
 }

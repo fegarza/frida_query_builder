@@ -1,4 +1,6 @@
 import 'package:frida_query_builder/src/query/common/query_builder.dart';
+import 'package:frida_query_builder/src/query/common/sql_renderer.dart';
+import 'package:frida_query_builder/src/query/common/subquery.dart';
 import 'package:frida_query_builder/src/query/criterion/field.dart';
 import 'package:frida_query_builder/src/query/operators/operator.dart';
 
@@ -38,6 +40,15 @@ class FieldQueryBuilder extends QueryBuilder {
         result += ' AS ${op.alias}';
       }
 
+      return result;
+    }
+    if (field is Subquery) {
+      final sub = field as Subquery;
+      String result =
+          "(${SqlRenderer().visitSelect(sub.select).replaceAll(";", "")})";
+      if (sub.alias != null) {
+        result += " AS ${sub.alias}";
+      }
       return result;
     }
     if (field is Field) {

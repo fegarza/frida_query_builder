@@ -79,17 +79,25 @@ class SqlRenderer implements StatementVisitor<String> {
 
   @override
   String visitInsert(Insert statement) {
+    if (statement.rows.isEmpty) {
+      return '';
+    }
     StringBuffer sb = StringBuffer();
-    sb.write("INSERT INTO ${statement.source}(");
-    sb.write(statement.values.keys.toList().join(", ") + ")");
-    sb.write(" VALUES(");
-    sb.write(statement.values.values
-            .toList()
-            .map(
-              (e) => FieldQueryBuilder(e).build(),
-            )
-            .join(", ") +
-        ");");
+    sb.write('INSERT INTO ${statement.source}(');
+
+    // Use columns from the first row as template
+    final columns = statement.rows.first.keys.toList();
+    sb.write('${columns.join(', ')})');
+    sb.write(' VALUES ');
+
+    final List<String> valuesList = [];
+    for (var row in statement.rows) {
+      final rowValues =
+          columns.map((col) => FieldQueryBuilder(row[col]).build()).join(', ');
+      valuesList.add('($rowValues)');
+    }
+
+    sb.write('${valuesList.join(', ')};');
     return sb.toString();
   }
 

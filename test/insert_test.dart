@@ -43,5 +43,14 @@ void main() {
       expect(query.build(),
           contains('INSERT INTO settings(is_active) VALUES(1);'));
     });
+    test('Insert multiple rows (bulk insert)', () {
+      final query = Insert(into: 'users').addRows([
+        {'name': 'Alice', 'age': 25},
+        {'name': 'Bob', 'age': 40},
+      ]);
+
+      final sql = query.build();
+      expect(sql, contains("VALUES ('Alice', 25), ('Bob', 40);"));
+    });
   });
 }

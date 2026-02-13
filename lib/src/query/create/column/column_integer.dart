@@ -9,7 +9,7 @@ class ColumnInteger extends Column {
       bool isNotNull = false,
       bool isUnique = false,
       bool isAutoIncrement = false,
-      int? defaultValue,
+      dynamic defaultValue,
       ForeignKey? foreignKey})
       : super(
             name: name,
@@ -18,6 +18,7 @@ class ColumnInteger extends Column {
             isNotNull: isNotNull,
             isUnique: isUnique,
             isAutoIncrement: isAutoIncrement,
-            defaultValue: defaultValue?.toString(),
+            defaultValue:
+                defaultValue is int ? defaultValue.toString() : defaultValue,
             foreignKey: foreignKey);
 }

@@ -7,6 +7,9 @@ extension FridaString on String {
 
   /// Shorthand to convert the string to a [Field].
   Field get f => Field(this);
+
+  /// Returns a [CurrentTimestamp] instance.
+  CurrentTimestamp get currentTimestamp => CurrentTimestamp();
 }
 
 /// Extensions for [int] to easily create [Field] objects (useful for numeric fields).

@@ -66,6 +66,7 @@ export 'package:frida_query_builder/src/query/functions/max.dart';
 export 'package:frida_query_builder/src/query/functions/min.dart';
 export 'package:frida_query_builder/src/query/functions/sum.dart';
 export 'package:frida_query_builder/src/query/functions/avg.dart';
+export 'package:frida_query_builder/src/query/functions/current_timestamp.dart';
 
 // Operators
 export 'package:frida_query_builder/src/query/operators/operator.dart';

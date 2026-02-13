@@ -71,6 +71,24 @@ void main() {
       expect(sql, contains('SUM(amount) AS total_amount'));
     });
 
+    test('Select with CURRENT_TIMESTAMP', () {
+      final query = Select(
+        from: 'users',
+        columns: ['id'.f, CurrentTimestamp()],
+      );
+      final sql = query.build();
+      expect(sql, contains('SELECT id, CURRENT_TIMESTAMP'));
+    });
+
+    test('Select with currentTimestamp extension', () {
+      final query = Select(
+        from: 'users',
+        columns: ['id'.f, 'curr'.currentTimestamp],
+      );
+      final sql = query.build();
+      expect(sql, contains('SELECT id, CURRENT_TIMESTAMP'));
+    });
+
     test('Select with ORDER BY, LIMIT and OFFSET', () {
       final query = Select(
         from: 'users',

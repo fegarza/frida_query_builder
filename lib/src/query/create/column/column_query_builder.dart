@@ -2,6 +2,7 @@ import 'package:frida_query_builder/src/query/common/criteria_statement.dart';
 import 'package:frida_query_builder/src/query/common/query_builder.dart';
 import 'package:frida_query_builder/src/query/create/column/column.dart';
 import 'package:frida_query_builder/src/query/create/column/column_data_type.dart';
+import 'package:frida_query_builder/src/query/criterion/field.dart';
 import 'package:frida_query_builder/src/query/criterion/criteria_query_builder.dart';
 
 class ColumnQueryBuilder implements QueryBuilder {
@@ -27,9 +28,10 @@ class ColumnQueryBuilder implements QueryBuilder {
     }
 
     if (column.defaultValue != null) {
-      final defaultValue = (column.type == ColumnDataType.text)
-          ? '"${column.defaultValue}"'
-          : "${column.defaultValue}";
+      final defaultValue =
+          (column.type == ColumnDataType.text && column.defaultValue is! Field)
+              ? '"${column.defaultValue}"'
+              : "${column.defaultValue}";
 
       sb.write(' DEFAULT($defaultValue)');
     }

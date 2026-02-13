@@ -20,7 +20,7 @@ abstract class Column {
   bool isAutoIncrement;
 
   /// Default value for the column.
-  String? defaultValue;
+  dynamic defaultValue;
 
   /// Whether the column has a UNIQUE constraint.
   bool isUnique;

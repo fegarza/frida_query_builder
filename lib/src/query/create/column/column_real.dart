@@ -8,7 +8,7 @@ class ColumnReal extends Column {
       bool isPrimaryKey = false,
       bool isNotNull = false,
       bool isUnique = false,
-      double? defaultValue,
+      dynamic defaultValue,
       ForeignKey? foreignKey})
       : super(
             name: name,
@@ -17,6 +17,8 @@ class ColumnReal extends Column {
             isNotNull: isNotNull,
             isUnique: isUnique,
             isAutoIncrement: false,
-            defaultValue: defaultValue?.toStringAsFixed(2),
+            defaultValue: defaultValue is double
+                ? defaultValue.toStringAsFixed(2)
+                : defaultValue,
             foreignKey: foreignKey);
 }

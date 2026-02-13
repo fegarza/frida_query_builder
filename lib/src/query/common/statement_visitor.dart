@@ -11,6 +11,10 @@ abstract class StatementVisitor<T> {
   T visitDelete(Delete statement);
   T visitCriteria(CriteriaStatement statement);
 
+  // Index statements
+  T visitCreateIndex(CreateIndex statement);
+  T visitDropIndex(DropIndex statement);
+
   // Alter statements
   T visitRenameTable(RenameTable statement);
   T visitAddColumn(AddColumn statement);

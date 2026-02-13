@@ -22,6 +22,8 @@ import 'package:frida_query_builder/src/query/alter/drop_column.dart';
 import 'package:frida_query_builder/src/query/alter/drop_table.dart';
 import 'package:frida_query_builder/src/query/alter/rename_column.dart';
 import 'package:frida_query_builder/src/query/alter/rename_table.dart';
+import 'package:frida_query_builder/src/query/index/create_index.dart';
+import 'package:frida_query_builder/src/query/index/drop_index.dart';
 
 class SqlRenderer implements StatementVisitor<String> {
   @override
@@ -187,6 +189,16 @@ class SqlRenderer implements StatementVisitor<String> {
 
     sb.write(";");
     return sb.toString();
+  }
+
+  @override
+  String visitCreateIndex(CreateIndex statement) {
+    return "CREATE ${statement.unique ? "UNIQUE " : ""}INDEX ${statement.indexName} ON ${statement.source} (${statement.columns.join(", ")});";
+  }
+
+  @override
+  String visitDropIndex(DropIndex statement) {
+    return "DROP INDEX ${statement.indexName};";
   }
 
   @override

@@ -75,3 +75,5 @@ export 'package:frida_query_builder/src/query/operators/minus.dart';
 export 'package:frida_query_builder/src/query/operators/multiply.dart';
 export 'package:frida_query_builder/src/query/operators/divide.dart';
 export 'package:frida_query_builder/src/query/operators/modulo.dart';
+export 'package:frida_query_builder/src/query/index/create_index.dart';
+export 'package:frida_query_builder/src/query/index/drop_index.dart';

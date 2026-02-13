@@ -1,3 +1,11 @@
+# 1.2.3
+
+- Add support for batch insert.
+- Add support for FOREIGN KEY - ON UPDATE AND ON DELETE actions.
+- Add support for CURRENT_TIMESTAMP function.
+- Add support for fluent style definition.
+- Add support for CREATE INDEX and DROP INDEX statements.
+
 ## 1.2.2
 
 - Fix to use single quotes for string literals in SQL queries (SQL standard compliance).

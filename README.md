@@ -219,7 +219,7 @@ print(delete.build());
 | Functionality               | Supported |
 | --------------------------- | :-------: |
 | INSERT INTO (single row)    |    ✅     |
-| INSERT INTO (multiple rows) |    ❌     |
+| INSERT INTO (multiple rows) |    ✅     |
 | UPDATE (with WHERE)         |    ✅     |
 | DELETE (with WHERE)         |    ✅     |
 
@@ -266,8 +266,8 @@ print(delete.build());
 | BEGIN TRANSACTION |    ❌     |
 | COMMIT            |    ❌     |
 | ROLLBACK          |    ❌     |
-| CREATE INDEX      |    ❌     |
-| DROP INDEX        |    ❌     |
+| CREATE INDEX      |    ✅     |
+| DROP INDEX        |    ✅     |
 | Unique indexes    |    ❌     |
 
 **Advanced**

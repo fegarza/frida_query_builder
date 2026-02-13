@@ -13,7 +13,7 @@ void main() {
       );
 
       final sql = query.build();
-      expect(sql, startsWith('INSERT INTO users(name, age) VALUES('));
+      expect(sql, startsWith('INSERT INTO users(name, age) VALUES ('));
       expect(sql, contains("'John Doe'"));
       expect(sql, contains('30'));
     });
@@ -41,7 +41,7 @@ void main() {
         },
       );
       expect(query.build(),
-          contains('INSERT INTO settings(is_active) VALUES(1);'));
+          contains('INSERT INTO settings(is_active) VALUES (1);'));
     });
     test('Insert multiple rows (bulk insert)', () {
       final query = Insert(into: 'users').addRows([

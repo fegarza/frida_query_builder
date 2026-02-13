@@ -52,7 +52,7 @@ void main() {
     test('Select with GROUP BY and HAVING', () {
       final query = Select(
         from: 'orders',
-        columns: ['user_id'.field, Count('id').as('order_count')],
+        columns: ['user_id'.field, Count('id'.f).as('order_count')],
         groupBy: ['user_id'],
         having: [GreaterThan(Count('id'.f), 5)],
       );

@@ -32,6 +32,15 @@ Or install it via command line:
 dart pub add frida_query_builder
 ```
 
+## 🖌️ Syntax Styles
+
+Frida provides two ways to build your queries:
+
+1.  **Direct Constructor**: Use the class constructors directly. This is useful for passing pre-built lists of columns or criteria.
+2.  **Fluent API**: Chained methods for a more readable and "Dart-like" experience.
+
+---
+
 ## 🚀 Examples
 
 ### Creating Tables (DDL)
@@ -107,6 +116,30 @@ INSERT INTO users(name, email) VALUES('Felipe', 'felipe@example.com');
 
 ### Querying Data (Select)
 
+#### Fluent API (Recommended)
+```dart
+final select = Select(from: "transactions")
+  .setColumns([
+    "transactions.id".field,
+    "transactions.amount".field,
+    "users.name".field.as("user_name"),
+  ])
+  .innerJoin("users", on: [
+    Equals("transactions.user_id".field, "users.id".field)
+  ])
+  .where([
+    GreaterThan("amount".field, 100),
+    Or([
+        Equals("status".field, "completed"),
+        Like("reference".field, "PAY-%")
+    ])
+  ])
+  .setLimit(10);
+
+print(select.build());
+```
+
+#### Direct Constructor
 ```dart
 final select = Select(
   from: "transactions",
@@ -132,17 +165,17 @@ final select = Select(
     ])
   ],
   limit: 10,
-  offset: 0
 );
 
 print(select.build());
+```
 
-/* Output:
+/* Output (both styles):
 SELECT transactions.id, transactions.amount, users.name AS user_name
 FROM transactions
 INNER JOIN users ON transactions.user_id = users.id
 WHERE amount > 100 AND (status = 'completed' OR reference LIKE 'PAY-%')
-LIMIT 10 OFFSET 0;
+LIMIT 10;
 */
 ```
 
@@ -202,9 +235,9 @@ print(delete.build());
 | LIMIT + OFFSET                                  |    ✅     |
 | INNER JOIN                                      |    ✅     |
 | LEFT JOIN                                       |    ✅     |
-| JOIN ON UPDATE                                  |    ❌     |
-| JOIN ON DELETE                                  |    ❌     |
-| Subqueries (WHERE, FROM, SELECT)                |    ❌     |
+| FOREIGN KEY ON DELETE                           |    ✅     |
+| FOREIGN KEY ON UPDATE                           |    ✅     |
+| Subqueries (WHERE, FROM, SELECT)                |    ✅     |
 | Aggregate functions (COUNT, SUM, AVG, MIN, MAX) |    ✅     |
 
 **Constraints & Expr.**

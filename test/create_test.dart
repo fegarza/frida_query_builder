@@ -64,5 +64,31 @@ void main() {
       final sql = query.build();
       expect(sql, contains('FOREIGN KEY(user_id) REFERENCES users(id)'));
     });
+
+    test('Create table with Foreign Key Actions', () {
+      final query = Create(
+        tableName: 'orders',
+        columns: [
+          ColumnInteger(name: 'id', isPrimaryKey: true, isAutoIncrement: true),
+          ColumnInteger(
+            name: 'user_id',
+            foreignKey: ForeignKey(
+              referencedTable: 'users',
+              referencedColumn: 'id',
+              onDelete: ForeignKeyAction.cascade,
+              onUpdate: ForeignKeyAction.setNull,
+            ),
+          ),
+        ],
+      );
+
+      final sql = query.build();
+      expect(
+        sql,
+        contains(
+          'FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE SET NULL',
+        ),
+      );
+    });
   });
 }

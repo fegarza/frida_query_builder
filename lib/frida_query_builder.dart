@@ -30,6 +30,7 @@ export 'package:frida_query_builder/src/query/create/column/column_text.dart';
 export 'package:frida_query_builder/src/query/select/select.dart';
 export 'package:frida_query_builder/src/query/select/join.dart';
 export 'package:frida_query_builder/src/query/select/join_type.dart';
+export 'package:frida_query_builder/src/query/select/sort.dart';
 
 // Insert
 export 'package:frida_query_builder/src/query/insert/insert.dart';

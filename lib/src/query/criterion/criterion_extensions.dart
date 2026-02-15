@@ -1,4 +1,5 @@
 import 'package:frida_query_builder/frida_query_builder.dart';
+import 'package:frida_query_builder/src/query/select/sort.dart';
 
 /// Extensions for [Field] to create [Criterion] objects fluently.
 extension FieldExtensions on Field {
@@ -32,6 +33,12 @@ extension FieldExtensions on Field {
 
   /// Creates an [In] criterion: `this IN (values)`.
   In isIn(List<Object> values) => In(this, values);
+
+  /// Creates a [Sort] in ascending order.
+  Sort get asc => Sort(this, OrderBy.asc);
+
+  /// Creates a [Sort] in descending order.
+  Sort get desc => Sort(this, OrderBy.desc);
 }
 
 /// Extensions for [Criterion] to combine them using logical operators.

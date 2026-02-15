@@ -92,13 +92,23 @@ void main() {
     test('Select with ORDER BY, LIMIT and OFFSET', () {
       final query = Select(
         from: 'users',
-        orderBy: ['created_at DESC'],
+        orderBy: ['created_at'.f.desc],
         limit: 10,
         offset: 5,
       );
       final sql = query.build();
       expect(sql, contains('ORDER BY created_at DESC'));
       expect(sql, contains('LIMIT 10 OFFSET 5'));
+    });
+
+    test('Select with fluent ASC and DESC sorting', () {
+      final query = Select(
+        from: 'users',
+        columns: ['name'.f],
+      ).orderByColumns(['name'.f.asc, 'age'.f.desc]).setLimit(5);
+      final sql = query.build();
+      expect(sql, contains('ORDER BY name ASC, age DESC'));
+      expect(sql, contains('LIMIT 5'));
     });
   });
 }

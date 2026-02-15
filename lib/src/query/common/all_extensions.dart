@@ -1,4 +1,5 @@
 import 'package:frida_query_builder/frida_query_builder.dart';
+import 'package:frida_query_builder/src/query/select/sort.dart';
 
 /// Extensions for [String] to easily create [Field] objects.
 extension FridaString on String {
@@ -10,6 +11,12 @@ extension FridaString on String {
 
   /// Returns a [CurrentTimestamp] instance.
   CurrentTimestamp get currentTimestamp => CurrentTimestamp();
+
+  /// Creates a [Sort] in ascending order.
+  Sort get asc => Sort(this, OrderBy.asc);
+
+  /// Creates a [Sort] in descending order.
+  Sort get desc => Sort(this, OrderBy.desc);
 }
 
 /// Extensions for [int] to easily create [Field] objects (useful for numeric fields).

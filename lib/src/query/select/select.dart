@@ -12,8 +12,8 @@ class Select extends CriteriaStatement {
   /// The columns to select. Can be [String], [Field], or [Operator].
   List<Object> columns;
 
-  /// The columns to use in the ORDER BY clause.
-  List<String> orderBy;
+  /// The columns to use in the ORDER BY clause. Can be [String], [Field], [Operator], or [Sort].
+  List<Object> orderBy;
 
   /// The columns to use in the GROUP BY clause.
   List<String> groupBy;
@@ -78,7 +78,7 @@ class Select extends CriteriaStatement {
   }
 
   /// Appends [columns] to the ORDER BY clause.
-  Select orderByColumns(List<String> columns) {
+  Select orderByColumns(List<Object> columns) {
     this.orderBy = [...this.orderBy, ...columns];
     return this;
   }

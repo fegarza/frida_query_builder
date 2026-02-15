@@ -12,6 +12,7 @@ import 'package:frida_query_builder/src/query/create/foreign_key_query_builder.d
 import 'package:frida_query_builder/src/query/create/primary_key_query_builder.dart';
 import 'package:frida_query_builder/src/query/criterion/field_query_builder.dart';
 import 'package:frida_query_builder/src/query/select/join_query_builder.dart';
+import 'package:frida_query_builder/src/query/select/sort.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_compare_query_builder.dart';
 
 import 'package:frida_query_builder/src/query/criterion/criterion_compare.dart';
@@ -249,7 +250,13 @@ class SqlRenderer implements StatementVisitor<String> {
   String _buildOrderBy(Select select) {
     final sb = StringBuffer();
     if (select.orderBy.isNotEmpty) {
-      sb.write(" ORDER BY " + select.orderBy.join(", "));
+      sb.write(" ORDER BY " +
+          select.orderBy.map((e) {
+            if (e is Sort) {
+              return "${FieldQueryBuilder(e.column).build()} ${e.order.getString()}";
+            }
+            return FieldQueryBuilder(e).build();
+          }).join(", "));
     }
     return sb.toString();
   }

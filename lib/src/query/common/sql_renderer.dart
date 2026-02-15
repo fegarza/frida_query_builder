@@ -120,9 +120,9 @@ class SqlRenderer implements StatementVisitor<String> {
     sb.write("FROM ${statement.source}$alias");
     if (statement.joins.isNotEmpty) {
       sb.write("\n");
-      for (final join in statement.joins) {
-        sb.write(JoinQueryBuilder(join).build());
-      }
+      sb.write(statement.joins
+          .map((join) => JoinQueryBuilder(join).build())
+          .join("\n"));
     }
 
     if (statement.criteria.isNotEmpty) {

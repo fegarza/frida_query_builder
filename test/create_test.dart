@@ -90,5 +90,30 @@ void main() {
         ),
       );
     });
+
+    test('Create table without Primary Key', () {
+      final query = Create(
+        tableName: 'no_pk',
+        columns: [
+          ColumnText(name: 'description'),
+        ],
+      );
+
+      final sql = query.build();
+      expect(sql, isNot(contains('PRIMARY KEY')));
+    });
+
+    test('Create table with composite Primary Key', () {
+      final query = Create(
+        tableName: 'composite_pk',
+        columns: [
+          ColumnInteger(name: 'id1', isPrimaryKey: true),
+          ColumnInteger(name: 'id2', isPrimaryKey: true),
+        ],
+      );
+
+      final sql = query.build();
+      expect(sql, contains('PRIMARY KEY(id1, id2)'));
+    });
   });
 }

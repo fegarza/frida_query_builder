@@ -61,9 +61,11 @@ class SqlRenderer implements StatementVisitor<String> {
     definitionsBuilders
         .addAll(statement.columns.map((e) => ColumnQueryBuilder(e)));
 
-    if (statement.columns.where((w) => w.isAutoIncrement).isEmpty) {
-      definitionsBuilders.add(PrimaryKeyQueryBuilder(
-          statement.columns.where((w) => w.isPrimaryKey).toList()));
+    final pkColumns = statement.columns.where((w) => w.isPrimaryKey).toList();
+
+    if (statement.columns.where((w) => w.isAutoIncrement).isEmpty &&
+        pkColumns.isNotEmpty) {
+      definitionsBuilders.add(PrimaryKeyQueryBuilder(pkColumns));
     }
 
     var foreignKeyColumns =

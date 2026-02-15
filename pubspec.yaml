@@ -1,10 +1,10 @@
 name: frida_query_builder
 description: A dart library that helps you create SQLITE queries using statements and the builder design pattern.
-version: 1.2.2
+version: 1.2.3
 homepage: https://github.com/fegarza/frida_query_builder
 
 environment:
-  sdk: '>=2.16.1 <4.0.0'
+  sdk: '>=2.17.0 <4.0.0'
 
 # dependencies:
 #   path: ^1.8.0

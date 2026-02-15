@@ -1,3 +1,5 @@
+import 'package:frida_query_builder/src/query/common/statement_visitor.dart';
+
 abstract class Criterion {
   String criterionOperator;
   final bool firstFieldQuoted;
@@ -7,4 +9,6 @@ abstract class Criterion {
     this.firstFieldQuoted = true,
     this.secondFieldQuoted = true,
   });
+
+  T accept<T>(StatementVisitor<T> visitor);
 }

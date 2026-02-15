@@ -1,9 +1,14 @@
+/// A fluent SQL query builder for Dart.
+///
+/// This library provides a set of classes and extensions to build SQL statements
+/// (SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER) using a fluent and intuitive API.
 library frida_query_builder;
 
 // Common
 export 'package:frida_query_builder/src/query/common/frida_query_builder.dart';
 export 'package:frida_query_builder/src/query/common/statement.dart';
 export 'package:frida_query_builder/src/query/common/all_extensions.dart';
+export 'package:frida_query_builder/src/query/common/subquery.dart';
 export 'package:frida_query_builder/src/query/common/frida_query_builder_extension.dart';
 export 'package:frida_query_builder/src/query/alter/alter.dart';
 export 'package:frida_query_builder/src/query/alter/rename_table.dart';
@@ -25,6 +30,7 @@ export 'package:frida_query_builder/src/query/create/column/column_text.dart';
 export 'package:frida_query_builder/src/query/select/select.dart';
 export 'package:frida_query_builder/src/query/select/join.dart';
 export 'package:frida_query_builder/src/query/select/join_type.dart';
+export 'package:frida_query_builder/src/query/select/sort.dart';
 
 // Insert
 export 'package:frida_query_builder/src/query/insert/insert.dart';
@@ -38,7 +44,8 @@ export 'package:frida_query_builder/src/query/delete/delete.dart';
 // Criterion
 export 'package:frida_query_builder/src/query/criterion/criterion.dart';
 export 'package:frida_query_builder/src/query/criterion/field.dart';
-export 'package:frida_query_builder/src/query/criterion/criterion_login.dart'; // Logic
+export 'package:frida_query_builder/src/query/criterion/criterion_logic.dart';
+export 'package:frida_query_builder/src/query/criterion/criterion_extensions.dart';
 export 'package:frida_query_builder/src/query/criterion/operators/and.dart';
 export 'package:frida_query_builder/src/query/criterion/operators/between.dart';
 export 'package:frida_query_builder/src/query/criterion/operators/equals.dart';
@@ -60,6 +67,7 @@ export 'package:frida_query_builder/src/query/functions/max.dart';
 export 'package:frida_query_builder/src/query/functions/min.dart';
 export 'package:frida_query_builder/src/query/functions/sum.dart';
 export 'package:frida_query_builder/src/query/functions/avg.dart';
+export 'package:frida_query_builder/src/query/functions/current_timestamp.dart';
 
 // Operators
 export 'package:frida_query_builder/src/query/operators/operator.dart';
@@ -68,3 +76,5 @@ export 'package:frida_query_builder/src/query/operators/minus.dart';
 export 'package:frida_query_builder/src/query/operators/multiply.dart';
 export 'package:frida_query_builder/src/query/operators/divide.dart';
 export 'package:frida_query_builder/src/query/operators/modulo.dart';
+export 'package:frida_query_builder/src/query/index/create_index.dart';
+export 'package:frida_query_builder/src/query/index/drop_index.dart';

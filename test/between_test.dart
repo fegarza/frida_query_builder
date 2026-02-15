@@ -24,7 +24,7 @@ void main() {
       final sql = query.build();
       // Strings should be quoted by FieldQueryBuilder when passed to Between
       expect(sql,
-          contains('WHERE event_date BETWEEN "2023-01-01" AND "2023-12-31"'));
+          contains("WHERE event_date BETWEEN '2023-01-01' AND '2023-12-31'"));
     });
 
     test('Between operator with mixed types', () {

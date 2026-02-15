@@ -52,9 +52,9 @@ void main() {
     test('Select with GROUP BY and HAVING', () {
       final query = Select(
         from: 'orders',
-        columns: ['user_id'.field, Count('id').as('order_count')],
+        columns: ['user_id'.field, Count('id'.f).as('order_count')],
         groupBy: ['user_id'],
-        having: [GreaterThan(Count('id'), 5)],
+        having: [GreaterThan(Count('id'.f), 5)],
       );
       final sql = query.build();
       expect(sql, contains('GROUP BY user_id'));
@@ -65,22 +65,50 @@ void main() {
     test('Select with Sum and alias', () {
       final query = Select(
         from: 'orders',
-        columns: [Sum('amount').as('total_amount')],
+        columns: [Sum('amount'.f).as('total_amount')],
       );
       final sql = query.build();
       expect(sql, contains('SUM(amount) AS total_amount'));
     });
 
+    test('Select with CURRENT_TIMESTAMP', () {
+      final query = Select(
+        from: 'users',
+        columns: ['id'.f, CurrentTimestamp()],
+      );
+      final sql = query.build();
+      expect(sql, contains('SELECT id, CURRENT_TIMESTAMP'));
+    });
+
+    test('Select with currentTimestamp extension', () {
+      final query = Select(
+        from: 'users',
+        columns: ['id'.f, 'curr'.currentTimestamp],
+      );
+      final sql = query.build();
+      expect(sql, contains('SELECT id, CURRENT_TIMESTAMP'));
+    });
+
     test('Select with ORDER BY, LIMIT and OFFSET', () {
       final query = Select(
         from: 'users',
-        orderBy: ['created_at DESC'],
+        orderBy: ['created_at'.f.desc],
         limit: 10,
         offset: 5,
       );
       final sql = query.build();
       expect(sql, contains('ORDER BY created_at DESC'));
       expect(sql, contains('LIMIT 10 OFFSET 5'));
+    });
+
+    test('Select with fluent ASC and DESC sorting', () {
+      final query = Select(
+        from: 'users',
+        columns: ['name'.f],
+      ).orderByColumns(['name'.f.asc, 'age'.f.desc]).setLimit(5);
+      final sql = query.build();
+      expect(sql, contains('ORDER BY name ASC, age DESC'));
+      expect(sql, contains('LIMIT 5'));
     });
   });
 }

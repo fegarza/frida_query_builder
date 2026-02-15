@@ -9,7 +9,7 @@ class ColumnText extends Column {
       bool isPrimaryKey = false,
       bool isNotNull = false,
       bool isUnique = false,
-      String? defaultValue,
+      dynamic defaultValue,
       ForeignKey? foreignKey,
       List<Criterion>? checkConstraints})
       : super(

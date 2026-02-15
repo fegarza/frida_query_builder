@@ -2,13 +2,27 @@ import 'package:frida_query_builder/src/query/common/statement.dart';
 import 'package:frida_query_builder/src/query/common/statement_visitor.dart';
 import 'package:frida_query_builder/src/query/create/column/column.dart';
 
+/// Represents an SQL CREATE TABLE statement.
 class Create extends Statement {
+  /// The list of columns to define in the table.
   List<Column> columns;
 
   Create({
     required String tableName,
-    required this.columns,
+    this.columns = const [],
   }) : super(tableName);
+
+  /// Appends a single [column] to the table definition.
+  Create addColumn(Column column) {
+    this.columns = [...this.columns, column];
+    return this;
+  }
+
+  /// Appends a list of [columns] to the table definition.
+  Create addColumns(List<Column> columns) {
+    this.columns = [...this.columns, ...columns];
+    return this;
+  }
 
   @override
   T accept<T>(StatementVisitor<T> visitor) {

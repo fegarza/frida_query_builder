@@ -6,15 +6,10 @@ class CriterionCompareQueryBuilder extends CriterionQueryBuilder {
   CriterionCompare criterionCompare;
 
   CriterionCompareQueryBuilder(
-    this.criterionCompare, {
-    this.firstFieldQuoted = true,
-    this.secondFieldQuoted = true,
-  }) : super(
+    this.criterionCompare,
+  ) : super(
           criterionCompare,
         );
-
-  final bool firstFieldQuoted;
-  final bool secondFieldQuoted;
 
   @override
   String build() {
@@ -22,10 +17,10 @@ class CriterionCompareQueryBuilder extends CriterionQueryBuilder {
 
     return "${FieldQueryBuilder(
       criterionCompare.firstField,
-      quoted: firstFieldQuoted,
+      quoted: criterionCompare.firstFieldQuoted,
     ).build()} ${criterionCompare.criterionOperator} ${FieldQueryBuilder(
       criterionCompare.secondField,
-      quoted: secondFieldQuoted,
+      quoted: criterionCompare.secondFieldQuoted,
     ).build()}";
   }
 }

@@ -31,6 +31,16 @@ class ForeignKeyQueryBuilder implements QueryBuilder {
           fkColumns.map((e) => e.foreignKey!.referencedColumn).join(", ") +
           ")";
 
+      if (fkColumns.first.foreignKey!.onDelete != null) {
+        fkConstraint +=
+            " ON DELETE ${fkColumns.first.foreignKey!.onDelete!.getString()}";
+      }
+
+      if (fkColumns.first.foreignKey!.onUpdate != null) {
+        fkConstraint +=
+            " ON UPDATE ${fkColumns.first.foreignKey!.onUpdate!.getString()}";
+      }
+
       fkConstraints.add(fkConstraint);
     }
 

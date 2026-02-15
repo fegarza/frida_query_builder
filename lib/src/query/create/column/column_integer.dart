@@ -1,3 +1,4 @@
+import "package:frida_query_builder/frida_query_builder.dart";
 import "package:frida_query_builder/src/query/create/column/column.dart";
 import "package:frida_query_builder/src/query/create/foreign_key.dart";
 import 'package:frida_query_builder/src/query/create/column/column_data_type.dart';
@@ -9,8 +10,9 @@ class ColumnInteger extends Column {
       bool isNotNull = false,
       bool isUnique = false,
       bool isAutoIncrement = false,
-      int? defaultValue,
-      ForeignKey? foreignKey})
+      dynamic defaultValue,
+      ForeignKey? foreignKey,
+      List<Criterion>? checkConstraints})
       : super(
             name: name,
             type: ColumnDataType.integer,
@@ -18,6 +20,8 @@ class ColumnInteger extends Column {
             isNotNull: isNotNull,
             isUnique: isUnique,
             isAutoIncrement: isAutoIncrement,
-            defaultValue: defaultValue?.toString(),
+            checkConstraints: checkConstraints,
+            defaultValue:
+                defaultValue is int ? defaultValue.toString() : defaultValue,
             foreignKey: foreignKey);
 }

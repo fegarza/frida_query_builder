@@ -12,54 +12,44 @@ import 'package:frida_query_builder/src/query/create/foreign_key_query_builder.d
 import 'package:frida_query_builder/src/query/create/primary_key_query_builder.dart';
 import 'package:frida_query_builder/src/query/criterion/field_query_builder.dart';
 import 'package:frida_query_builder/src/query/select/join_query_builder.dart';
-import 'package:frida_query_builder/src/query/criterion/criterion_logic_query_builder.dart';
+import 'package:frida_query_builder/src/query/select/sort.dart';
 import 'package:frida_query_builder/src/query/criterion/criterion_compare_query_builder.dart';
 
 import 'package:frida_query_builder/src/query/criterion/criterion_compare.dart';
-import 'package:frida_query_builder/src/query/criterion/criterion_login.dart';
+import 'package:frida_query_builder/src/query/criterion/criterion_logic.dart';
 
-import 'package:frida_query_builder/src/query/alter/alter.dart';
 import 'package:frida_query_builder/src/query/alter/add_column.dart';
 import 'package:frida_query_builder/src/query/alter/drop_column.dart';
 import 'package:frida_query_builder/src/query/alter/drop_table.dart';
 import 'package:frida_query_builder/src/query/alter/rename_column.dart';
 import 'package:frida_query_builder/src/query/alter/rename_table.dart';
+import 'package:frida_query_builder/src/query/index/create_index.dart';
+import 'package:frida_query_builder/src/query/index/drop_index.dart';
 
 class SqlRenderer implements StatementVisitor<String> {
   @override
-  String visitAlter(Alter statement) {
-    var sb = StringBuffer();
+  String visitRenameTable(RenameTable statement) {
+    return "ALTER TABLE ${statement.source} RENAME TO ${statement.newName};";
+  }
 
-    if (statement is RenameTable) {
-      sb.write(
-          "ALTER TABLE ${statement.source} RENAME TO ${statement.newName};");
-      return sb.toString();
-    }
+  @override
+  String visitAddColumn(AddColumn statement) {
+    return "ALTER TABLE ${statement.source} ADD COLUMN ${ColumnQueryBuilder(statement.column).build()};";
+  }
 
-    if (statement is AddColumn) {
-      sb.write(
-          "ALTER TABLE ${statement.source} ADD COLUMN ${ColumnQueryBuilder(statement.column).build()};");
-      return sb.toString();
-    }
+  @override
+  String visitRenameColumn(RenameColumn statement) {
+    return "ALTER TABLE ${statement.source} RENAME COLUMN ${statement.oldName} TO ${statement.newName};";
+  }
 
-    if (statement is RenameColumn) {
-      sb.write(
-          "ALTER TABLE ${statement.source} RENAME COLUMN ${statement.oldName} TO ${statement.newName};");
-      return sb.toString();
-    }
+  @override
+  String visitDropColumn(DropColumn statement) {
+    return "ALTER TABLE ${statement.source} DROP COLUMN ${statement.columnName};";
+  }
 
-    if (statement is DropColumn) {
-      sb.write(
-          "ALTER TABLE ${statement.source} DROP COLUMN ${statement.columnName};");
-      return sb.toString();
-    }
-
-    if (statement is DropTable) {
-      sb.write("DROP TABLE ${statement.source};");
-      return sb.toString();
-    }
-
-    return sb.toString();
+  @override
+  String visitDropTable(DropTable statement) {
+    return "DROP TABLE ${statement.source};";
   }
 
   @override
@@ -72,9 +62,11 @@ class SqlRenderer implements StatementVisitor<String> {
     definitionsBuilders
         .addAll(statement.columns.map((e) => ColumnQueryBuilder(e)));
 
-    if (statement.columns.where((w) => w.isAutoIncrement).isEmpty) {
-      definitionsBuilders.add(PrimaryKeyQueryBuilder(
-          statement.columns.where((w) => w.isPrimaryKey).toList()));
+    final pkColumns = statement.columns.where((w) => w.isPrimaryKey).toList();
+
+    if (statement.columns.where((w) => w.isAutoIncrement).isEmpty &&
+        pkColumns.isNotEmpty) {
+      definitionsBuilders.add(PrimaryKeyQueryBuilder(pkColumns));
     }
 
     var foreignKeyColumns =
@@ -92,17 +84,25 @@ class SqlRenderer implements StatementVisitor<String> {
 
   @override
   String visitInsert(Insert statement) {
+    if (statement.rows.isEmpty) {
+      return '';
+    }
     StringBuffer sb = StringBuffer();
-    sb.write("INSERT INTO ${statement.source}(");
-    sb.write(statement.values.keys.toList().join(", ") + ")");
-    sb.write(" VALUES(");
-    sb.write(statement.values.values
-            .toList()
-            .map(
-              (e) => FieldQueryBuilder(e).build(),
-            )
-            .join(", ") +
-        ");");
+    sb.write('INSERT INTO ${statement.source}(');
+
+    // Use columns from the first row as template
+    final columns = statement.rows.first.keys.toList();
+    sb.write('${columns.join(', ')})');
+    sb.write(' VALUES ');
+
+    final List<String> valuesList = [];
+    for (var row in statement.rows) {
+      final rowValues =
+          columns.map((col) => FieldQueryBuilder(row[col]).build()).join(', ');
+      valuesList.add('($rowValues)');
+    }
+
+    sb.write('${valuesList.join(', ')};');
     return sb.toString();
   }
 
@@ -120,9 +120,9 @@ class SqlRenderer implements StatementVisitor<String> {
     sb.write("FROM ${statement.source}$alias");
     if (statement.joins.isNotEmpty) {
       sb.write("\n");
-      for (final join in statement.joins) {
-        sb.write(JoinQueryBuilder(join).build());
-      }
+      sb.write(statement.joins
+          .map((join) => JoinQueryBuilder(join).build())
+          .join("\n"));
     }
 
     if (statement.criteria.isNotEmpty) {
@@ -147,7 +147,7 @@ class SqlRenderer implements StatementVisitor<String> {
 
     if (statement.orderBy.isNotEmpty) {
       sb.write("\n");
-      sb.writeln(_buildOrderBy(statement));
+      sb.write(_buildOrderBy(statement));
     }
     if (statement.limit != null) {
       sb.write("\n");
@@ -195,36 +195,40 @@ class SqlRenderer implements StatementVisitor<String> {
   }
 
   @override
+  String visitCreateIndex(CreateIndex statement) {
+    return "CREATE ${statement.unique ? "UNIQUE " : ""}INDEX ${statement.indexName} ON ${statement.source} (${statement.columns.join(", ")});";
+  }
+
+  @override
+  String visitDropIndex(DropIndex statement) {
+    return "DROP INDEX ${statement.indexName};";
+  }
+
+  @override
   String visitCriteria(CriteriaStatement statement) {
-    var sb = StringBuffer();
-    bool isFirstIteration = true;
+    return statement.criteria.map((c) => c.accept(this)).join(" AND ");
+  }
 
-    for (final criteria in statement.criteria) {
-      if (criteria is CriterionLogic) {
-        sb.write(
-          CriterionLogicQueryBuilder(criteria,
-                  quoted: criteria.firstFieldQuoted)
-              .build(),
-        );
-      }
-
-      if (criteria is CriterionCompare) {
-        if (!isFirstIteration) {
-          sb.write(" AND ");
-        }
-        sb.write(
-          CriterionCompareQueryBuilder(
-            criteria,
-            firstFieldQuoted: criteria.firstFieldQuoted,
-            secondFieldQuoted: criteria.secondFieldQuoted,
-          ).build(),
-        );
-      }
-
-      isFirstIteration = false;
+  @override
+  String visitCriterionLogic(CriterionLogic statement) {
+    if (statement.criteria.isEmpty) {
+      return "";
     }
 
-    return sb.toString();
+    if (statement.criterionOperator == "NOT") {
+      return "NOT (${statement.criteria.first.accept(this)})";
+    }
+
+    return "(" +
+        statement.criteria
+            .map((c) => c.accept(this))
+            .join(" ${statement.criterionOperator} ") +
+        ")";
+  }
+
+  @override
+  String visitCriterionCompare(CriterionCompare statement) {
+    return CriterionCompareQueryBuilder(statement).build();
   }
 
   // Helper methods for Select
@@ -246,7 +250,13 @@ class SqlRenderer implements StatementVisitor<String> {
   String _buildOrderBy(Select select) {
     final sb = StringBuffer();
     if (select.orderBy.isNotEmpty) {
-      sb.write(" ORDER BY " + select.orderBy.join(", "));
+      sb.write(" ORDER BY " +
+          select.orderBy.map((e) {
+            if (e is Sort) {
+              return "${FieldQueryBuilder(e.column).build()} ${e.order.getString()}";
+            }
+            return FieldQueryBuilder(e).build();
+          }).join(", "));
     }
     return sb.toString();
   }

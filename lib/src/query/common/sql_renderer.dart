@@ -147,7 +147,7 @@ class SqlRenderer implements StatementVisitor<String> {
 
     if (statement.orderBy.isNotEmpty) {
       sb.write("\n");
-      sb.writeln(_buildOrderBy(statement));
+      sb.write(_buildOrderBy(statement));
     }
     if (statement.limit != null) {
       sb.write("\n");

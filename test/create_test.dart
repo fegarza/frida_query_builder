@@ -115,5 +115,19 @@ void main() {
       final sql = query.build();
       expect(sql, contains('PRIMARY KEY(id1, id2)'));
     });
+
+    test('Create table with IF NOT EXISTS', () {
+      final query = Create(
+        tableName: 'users',
+        columns: [
+          ColumnInteger(name: 'id', isPrimaryKey: true),
+        ],
+      ).ifNotExists();
+
+      expect(
+        query.build(),
+        startsWith('CREATE TABLE IF NOT EXISTS users(\n'),
+      );
+    });
   });
 }

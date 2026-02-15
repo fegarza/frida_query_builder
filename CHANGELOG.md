@@ -1,3 +1,7 @@
+# 1.2.4
+
+- Add support for CREATE TABLE IF NOT EXISTS statement.
+
 # 1.2.3
 
 - Add support for batch insert.

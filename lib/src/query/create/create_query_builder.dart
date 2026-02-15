@@ -15,7 +15,8 @@ class CreateQueryBuilder extends FridaQueryBuilder {
 
     final tableName = create.source;
 
-    sb.writeln("CREATE TABLE $tableName(");
+    sb.writeln(
+        "CREATE TABLE ${create.isIfNotExists ? "IF NOT EXISTS " : ""}$tableName(");
 
     final definitionsBuilders = [];
 
@@ -40,5 +41,4 @@ class CreateQueryBuilder extends FridaQueryBuilder {
 
     return sb.toString();
   }
-
 }

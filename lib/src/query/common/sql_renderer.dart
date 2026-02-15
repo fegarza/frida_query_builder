@@ -56,7 +56,8 @@ class SqlRenderer implements StatementVisitor<String> {
   String visitCreate(Create statement) {
     var sb = StringBuffer();
     final tableName = statement.source;
-    sb.writeln("CREATE TABLE $tableName(");
+    sb.writeln(
+        "CREATE TABLE ${statement.isIfNotExists ? "IF NOT EXISTS " : ""}$tableName(");
 
     final definitionsBuilders = [];
     definitionsBuilders

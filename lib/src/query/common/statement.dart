@@ -3,7 +3,7 @@ import 'package:frida_query_builder/src/query/common/statement_visitor.dart';
 /// Represents a base SQL statement.
 abstract class Statement {
   /// The source table or entity for the statement.
-  String source;
+  String? source;
 
   Statement(this.source);
 

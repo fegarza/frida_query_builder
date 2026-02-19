@@ -7,7 +7,7 @@ class CriteriaStatement extends Statement {
   /// The list of criteria for this statement.
   List<Criterion> criteria;
 
-  CriteriaStatement(String source, {this.criteria = const []}) : super(source);
+  CriteriaStatement(String? source, {this.criteria = const []}) : super(source);
 
   @override
   T accept<T>(StatementVisitor<T> visitor) {

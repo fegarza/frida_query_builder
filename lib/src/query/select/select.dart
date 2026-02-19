@@ -37,7 +37,7 @@ class Select extends CriteriaStatement {
   List<Criterion> having;
 
   Select({
-    required String from,
+    String? from,
     this.columns = const [],
     this.groupBy = const [],
     this.orderBy = const [],

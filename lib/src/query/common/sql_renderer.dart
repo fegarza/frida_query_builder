@@ -116,9 +116,11 @@ class SqlRenderer implements StatementVisitor<String> {
       alias = " AS ${statement.alias}";
     }
 
-    sb.writeln(
+    sb.write(
         "SELECT ${statement.distinct ? "DISTINCT " : ""}${_buildProjections(statement)}");
-    sb.write("FROM ${statement.source}$alias");
+    if (statement.source != null) {
+      sb.write("\nFROM ${statement.source}$alias");
+    }
     if (statement.joins.isNotEmpty) {
       sb.write("\n");
       sb.write(statement.joins

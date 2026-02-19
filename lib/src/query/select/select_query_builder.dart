@@ -18,9 +18,11 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
       alias = "AS ${select.alias}";
     }
 
-    sb.writeln(
+    sb.write(
         "SELECT ${select.distinct ? "DISTINCT " : ""}${_buildProjections()}");
-    sb.writeln("FROM ${select.source} $alias");
+    if (select.source != null) {
+      sb.write("\nFROM ${select.source} $alias");
+    }
     if (select.joins.isNotEmpty) {
       for (final join in select.joins) {
         sb.write(JoinQueryBuilder(join).build());
@@ -28,16 +30,16 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
     }
 
     if (select.criteria.isNotEmpty) {
-      sb.writeln("WHERE ${CriteriaQueryBuilder(CriteriaStatement(
+      sb.write("\nWHERE ${CriteriaQueryBuilder(CriteriaStatement(
         select.source,
         criteria: select.criteria,
       )).build()}");
     }
 
     if (select.groupBy.isNotEmpty) {
-      sb.writeln(_buildGroupBy());
+      sb.write("\n${_buildGroupBy()}");
       if (select.having.isNotEmpty) {
-        sb.writeln(" HAVING${CriteriaQueryBuilder(CriteriaStatement(
+        sb.write(" HAVING${CriteriaQueryBuilder(CriteriaStatement(
           select.source,
           criteria: select.having,
         )).build()}");
@@ -45,7 +47,7 @@ class SelectQueryBuilder extends CriteriaQueryBuilder {
     }
 
     if (select.orderBy.isNotEmpty) {
-      sb.writeln(_buildOrderBy());
+      sb.write("\n${_buildOrderBy()}");
     }
     if (select.limit != null) {
       sb.write(_buildOffset());

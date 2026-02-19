@@ -1,3 +1,7 @@
+# 1.2.5
+
+- Fix, 'from' in select statement is not required.
+
 # 1.2.4
 
 - Add support for CREATE TABLE IF NOT EXISTS statement.

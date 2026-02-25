@@ -42,7 +42,7 @@ void main() {
       expect(sql, contains('CREATE TABLE products'));
       expect(sql, contains('id INTEGER PRIMARY KEY AUTOINCREMENT'));
       expect(sql, contains('name TEXT NOT NULL UNIQUE'));
-      expect(sql, contains('price REAL DEFAULT(0.00)'));
+      expect(sql, contains("price REAL DEFAULT('0.00')"));
       expect(sql, contains('image BLOB'));
     });
 
@@ -128,6 +128,20 @@ void main() {
         query.build(),
         startsWith('CREATE TABLE IF NOT EXISTS users(\n'),
       );
+    });
+    test('Create table with text default value and escaping', () {
+      final query = Create(
+        tableName: 'settings',
+        columns: [
+          ColumnText(name: 'key', isPrimaryKey: true),
+          ColumnText(name: 'value', defaultValue: "It's a value"),
+          ColumnText(name: 'email', defaultValue: 'example@outlook.com'),
+        ],
+      );
+
+      final sql = query.build();
+      expect(sql, contains("value TEXT DEFAULT('It''s a value')"));
+      expect(sql, contains("email TEXT DEFAULT('example@outlook.com')"));
     });
   });
 }

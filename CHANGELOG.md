@@ -1,3 +1,7 @@
+# 1.2.6
+
+- Fix double quotes in default values.
+
 # 1.2.5
 
 - Fix, 'from' in select statement is not required.
